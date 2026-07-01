@@ -177,7 +177,7 @@
                 return;
             }
             grid.innerHTML = filtered.map(c => `
-                <article class="card ${c.type}">
+                <article class="card ${c.type}" ${c.videoUrl ? `onclick="window.open('${c.videoUrl}', '_blank')" style="cursor:pointer"` : ""}>
                     <div class="card-img">${c.type === 'video' ? '<div class="play-icon">▶</div>' : c.icon}</div>
                     <div class="card-content">
                         <span class="card-type">${c.type === 'video' ? (currentLang === 'zh' ? '视频' : currentLang === 'en' ? 'Video' : 'Video') : (currentLang === 'zh' ? '文章' : currentLang === 'en' ? 'Article' : 'Artikel')}</span>
