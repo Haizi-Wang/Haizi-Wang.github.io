@@ -77,7 +77,7 @@ function StepperField({
         type="text"
         inputMode="numeric"
         value={value}
-        onFocus={() => onValue('')}
+        onFocus={(e) => e.currentTarget.select()}
         onChange={(e) => onValue(digitsOnly(e.target.value))}
         aria-describedby={undefined}
       />
@@ -379,9 +379,7 @@ export default function App() {
                           type="text"
                           inputMode="numeric"
                           value={text}
-                          onFocus={() => {
-                            setChildTexts((rows) => rows.map((row, j) => (j === i ? '' : row)))
-                          }}
+                          onFocus={(e) => e.currentTarget.select()}
                           onChange={(e) => {
                             const raw = digitsOnly(e.target.value)
                             if (raw === '') {
