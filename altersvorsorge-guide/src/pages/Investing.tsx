@@ -42,6 +42,7 @@ export default function Investing() {
         <p>{i.riskTolerance}</p>
 
         <h2>{i.retireTitle}</h2>
+        <div className="prose-cta-spacer" aria-hidden="true" />
         <p className="prose-cta">
           {i.retireBefore}
           <Link to="/withdrawal">{i.retireLink}</Link>
