@@ -3,7 +3,7 @@ import Calculator from "@alterversorge/App.tsx";
 import "../calc-embed.css";
 
 /** Target layout width for the two-column calculator; scale down when narrower. */
-const FIT_WIDTH = 1180;
+const FIT_WIDTH = 1240;
 
 export default function Rechner() {
   const viewportRef = useRef<HTMLDivElement>(null);
