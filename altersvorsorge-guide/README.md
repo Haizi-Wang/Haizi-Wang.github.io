@@ -13,13 +13,17 @@ npm run preview
 
 打开：http://127.0.0.1:5174/altersvorsorge-guide/
 
-## 构建
+## 构建 / GitHub Pages
+
+Pages 从 `main` 仓库根目录静态托管（无单独 build Action）。`dist/` 被 gitignore，发布时需把生产构建同步进本目录：
 
 ```bash
 npm run build
+# → 写入 index.html、404.html、assets/（含 JS/CSS/mp3）
+# 然后提交并 push 到 main
 ```
 
-`base` 为 `/altersvorsorge-guide/`，便于与 GitHub Pages 同域部署。
+`base` 为 `/altersvorsorge-guide/`。`404.html` 与 `index.html` 相同，供 `/rechner`、`/film` 等 SPA 深链。开发用 `index.source.html`（`npm run dev` 会先还原）。
 
 ## 计算器
 
