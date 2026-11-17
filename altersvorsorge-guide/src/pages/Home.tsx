@@ -31,7 +31,6 @@ export default function Home() {
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
-        <p className="hero-kicker">教育指南 · Milestone 1</p>
         <h1 id="hero-title" className="hero-title">
           Altersvorsorgedepot
         </h1>
