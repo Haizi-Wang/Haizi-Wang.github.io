@@ -1,5 +1,7 @@
 /* Tailwind + calculator widget styles (no body chrome — guide owns page atmosphere). */
 @import "tailwindcss";
+/* Scan sibling calculator sources so utility classes (p-5, lg:grid-cols-*, etc.) emit. */
+@source "../../alterversorge/src";
 
 .font-display {
   font-family: var(--display);
