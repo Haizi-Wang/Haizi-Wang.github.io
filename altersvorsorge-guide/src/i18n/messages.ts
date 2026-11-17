@@ -251,6 +251,9 @@ export const messages = {
       inheritTitle: "继承",
       inherit:
         "如果投资人不幸身亡，配偶和子女有权利继承，继承账户余额的方式主要取决于是否进入退休提领期，继承人的身份状态以及选择的提取/转接形式。",
+      feeTitle: "退休提领期的手续费",
+      fee:
+        "无统一固定金额，提领期手续费券商须事前强制披露，未明示即免单。标准账户 1.0% 有效成本封顶，一次性提取（最高 30% 或微型养老金买断）无退保或解约罚金。",
       nextBefore: "用数字检验自己的缴费与提领情景： ",
       nextLink: "打开计算器 →",
     },
@@ -518,6 +521,9 @@ export const messages = {
       inheritTitle: "Inheritance",
       inherit:
         "If the account holder dies, the spouse and children have a right to inherit. How the account balance is inherited mainly depends on whether the retirement payout phase has already begun, the heirs’ status, and the chosen form of withdrawal or transfer.",
+      feeTitle: "Fees in the retirement payout phase",
+      fee:
+        "There is no single fixed fee. Providers must disclose payout-phase fees in advance; if they are not stated, the fee is waived. Standard accounts are capped at 1.0% effective cost. One-off withdrawals (up to 30%, or a Kleinbetragsrente buyout) carry no surrender or cancellation penalty.",
       nextBefore: "Check your contribution and payout scenarios: ",
       nextLink: "Open calculator →",
     },
