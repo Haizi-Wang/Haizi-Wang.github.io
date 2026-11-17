@@ -192,12 +192,18 @@ a:hover {
 }
 
 .main--rechner {
-  max-width: none;
-  padding: 0.5rem 0 2rem;
+  max-width: min(72rem, 100%);
+  margin-inline: auto;
+  padding: 0.75rem clamp(1.25rem, 4.5vw, 2.75rem) 2.5rem;
 }
 
 .rechner-page {
   width: 100%;
+}
+
+.rechner-page .shell {
+  padding-left: clamp(0.75rem, 2vw, 1.25rem);
+  padding-right: clamp(0.75rem, 2vw, 1.25rem);
 }
 
 .hero {
