@@ -20,8 +20,8 @@ export default function Withdrawal() {
           岁）或终身年金等法定安排。
         </p>
         <p>
-          若尚未进入提领期、但需将养老资产用于自住房屋无障碍/节能改造，可能另有 Eigenheimbetrag
-          专项路径（时间窗口、最低金额与技术证明要求与 30% 自由提取不同）——二者不可混淆。
+          若尚未进入提领期、但需将养老资产用于自住房屋无障碍/节能改造，设有 Eigenheimbetrag
+          专项路径（需符合特定时间窗口、最低金额与技术证明等要求）。
         </p>
 
         <h2>有害提取（schädliche Verwendung）</h2>
