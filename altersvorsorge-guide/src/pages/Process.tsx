@@ -66,15 +66,15 @@ export default function Process() {
             <dd>180 €</dd>
             <dt>无孩 · 年底总额（自付+补助）</dt>
             <dd>540 €</dd>
-            <dt>一孩 · 国家补助合计</dt>
+            <dt>一孩 · 补助合计</dt>
             <dd>480 €</dd>
             <dt>一孩 · 年底总额</dt>
             <dd>840 €</dd>
-            <dt>两孩 · 国家补助合计</dt>
+            <dt>两孩 · 补助合计</dt>
             <dd>780 €</dd>
             <dt>两孩 · 年底总额</dt>
             <dd>1,140 €</dd>
-            <dt>三孩 · 国家补助合计</dt>
+            <dt>三孩 · 补助合计</dt>
             <dd>1,080 €</dd>
             <div className="total">
               <span>三孩 · 年底总额</span>
