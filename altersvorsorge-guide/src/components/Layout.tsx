@@ -1,69 +1,85 @@
-import { NavLink, Outlet } from "react-router-dom";
-
-const links = [
-  { to: "/", label: "概览", end: true },
-  { to: "/eligibility", label: "准入条件" },
-  { to: "/process", label: "过程" },
-  { to: "/investing", label: "选基金" },
-  { to: "/withdrawal", label: "退出提领" },
-  { to: "/rechner", label: "计算器" },
-  { to: "/film", label: "介绍影片" },
-] as const;
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { useI18n } from "../i18n/I18nProvider";
 
 export default function Layout() {
+  const { pathname } = useLocation();
+  const isRechner = pathname === "/rechner";
+  const { lang, t, setLang } = useI18n();
+
+  const links = [
+    { to: "/", label: t.nav.home, end: true },
+    { to: "/eligibility", label: t.nav.eligibility },
+    { to: "/process", label: t.nav.process },
+    { to: "/investing", label: t.nav.investing },
+    { to: "/withdrawal", label: t.nav.withdrawal },
+    { to: "/rechner", label: t.nav.rechner },
+    { to: "/film", label: t.nav.film },
+  ] as const;
+
   return (
     <div className="site">
       <header className="site-header">
         <div className="header-inner">
           <NavLink to="/" className="brand" end>
             <span className="brand-de">Altersvorsorgedepot</span>
-            <span className="brand-zh">德国养老投资账户</span>
+            <span className="brand-zh">{t.brandZh}</span>
           </NavLink>
-          <nav className="nav" aria-label="主导航">
-            {links.map((link) => (
-              <NavLink
-                key={link.to}
-                to={link.to}
-                end={"end" in link ? link.end : false}
-                className={({ isActive }) => (isActive ? "active" : undefined)}
+          <div className="header-tools">
+            <nav className="nav" aria-label={t.nav.aria}>
+              {links.map((link) => (
+                <NavLink
+                  key={link.to}
+                  to={link.to}
+                  end={"end" in link ? link.end : false}
+                  className={({ isActive }) => (isActive ? "active" : undefined)}
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="lang-toggle" role="group" aria-label={t.lang.aria}>
+              <button
+                type="button"
+                className={lang === "zh" ? "active" : undefined}
+                aria-pressed={lang === "zh"}
+                onClick={() => setLang("zh")}
               >
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+                {t.lang.switchToZh}
+              </button>
+              <button
+                type="button"
+                className={lang === "en" ? "active" : undefined}
+                aria-pressed={lang === "en"}
+                onClick={() => setLang("en")}
+              >
+                {t.lang.switchToEn}
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="main">
+      <main className={isRechner ? "main main--rechner" : "main"}>
         <Outlet />
       </main>
 
       <footer className="site-footer">
         <div className="footer-inner">
           <p className="disclaimer">
-            <strong>免责声明：</strong>
-            本站为正式教育说明，依据德国联邦财政部、联邦议院立法记录、德国养老保险机构及公开法案整理，
-            <strong>不构成个性化投资、税务或法律建议</strong>
-            。补贴资格、合同认证与税务后果因个人情况而异；作出决定前请查阅官方资料或咨询持牌顾问。
-            测算请使用站内计算器，并以合同与官方规则为准。
+            <strong>{t.footer.disclaimerLabel}</strong>
+            {t.footer.disclaimer}
           </p>
           <div className="footer-meta">
-            <span>默认语言：简体中文（zh-CN）</span>
-            <a
-              href="https://deutsch-alterversorge-rechner.apps.grok.bot"
-              target="_blank"
-              rel="noreferrer"
-            >
-              独立计算器
-            </a>
+            <span>{lang === "zh" ? t.lang.footerDefault : t.lang.footerEn}</span>
+            <NavLink to="/rechner">{t.footer.calc}</NavLink>
             <a
               href="https://github.com/Haizi-Wang/Haizi-Wang.github.io/tree/main/altersvorsorge-guide"
               target="_blank"
               rel="noreferrer"
             >
-              源码
+              {t.footer.source}
             </a>
-            <span>参考法规：AVR Gz 29Mai2026（Altersvorsorgereformgesetz）</span>
+            <span>{t.footer.law}</span>
           </div>
         </div>
       </footer>

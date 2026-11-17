@@ -110,6 +110,7 @@ a:hover {
 
 .site {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -133,10 +134,51 @@ a:hover {
   justify-content: space-between;
 }
 
+.header-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem 0.9rem;
+  min-width: 0;
+}
+
+.lang-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  gap: 0.15rem;
+  padding: 0.15rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.lang-toggle button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.3rem 0.65rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.lang-toggle button:hover {
+  color: var(--primary);
+}
+
+.lang-toggle button.active {
+  background: var(--primary);
+  color: #f4faf8;
+}
+
 .brand {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.35rem;
   text-decoration: none;
   color: inherit;
   min-width: 0;
@@ -147,11 +189,14 @@ a:hover {
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1.3;
+  padding-bottom: 0.08em;
   color: var(--primary);
 }
 
 .brand-zh {
   font-size: 0.78rem;
+  line-height: 1.35;
   color: var(--muted);
 }
 
@@ -191,6 +236,79 @@ a:hover {
   animation: rise-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.main--rechner {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  margin-inline: auto;
+  padding: 0.75rem clamp(1rem, 3.5vw, 2rem) 1.5rem;
+  /* Scale-to-fit owns clipping inside .rechner-scale-slot; do not clip here. */
+  overflow: visible;
+}
+
+.rechner-page {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+}
+
+.rechner-scale-slot {
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.rechner-fit {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  transform-origin: top left;
+}
+
+.rechner-fit--scaled {
+  max-width: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.rechner-page .shell {
+  overflow: visible !important;
+  max-width: 100%;
+  min-height: 0 !important;
+  box-sizing: border-box;
+  padding-left: clamp(0.75rem, 2vw, 1.25rem) !important;
+  padding-right: clamp(0.75rem, 2vw, 1.25rem) !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+/* Shorter charts + scrollable notes so embed height can fit the viewport. */
+.rechner-page .chart-scroll {
+  max-height: 14rem;
+}
+
+.rechner-page .shell > .grid > section.panel > .mt-6.border-t {
+  max-height: 9.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.rechner-page .panel {
+  padding: 1.15rem clamp(1rem, 2.5vw, 1.5rem) !important;
+}
+
+@media (min-width: 640px) {
+  .rechner-page .panel {
+    padding: 1.35rem clamp(1.15rem, 3vw, 1.75rem) !important;
+  }
+}
+
 .hero {
   padding: 1.5rem 0 2rem;
   max-width: 40rem;
@@ -206,22 +324,21 @@ a:hover {
 }
 
 .hero-title {
-  margin: 0 0 0.85rem;
+  margin: 0 0 1.6rem;
+  padding: 0.1em 0 0.2em;
   font-family: var(--display);
   font-size: clamp(2.1rem, 5vw, 3.15rem);
-  line-height: 1.12;
+  line-height: 1.4;
   letter-spacing: -0.02em;
-  background: linear-gradient(120deg, #0b3d4a, #1f6b52, #2a7a8c, #0b3d4a);
-  background-size: 220% 220%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer 10s ease-in-out infinite;
+  overflow: visible;
+  /* Solid fill — background-clip:text was painting over / clipping Fraunces descenders. */
+  color: var(--primary);
 }
 
 .hero-lead {
-  margin: 0 0 1.4rem;
+  margin: 0.5rem 0 1.4rem;
   font-size: 1.08rem;
+  line-height: 1.65;
   color: var(--muted);
   max-width: 36rem;
 }
@@ -472,6 +589,37 @@ a:hover {
   height: min(85vh, 920px);
   border: 0;
   background: #e8f1ef;
+}
+
+.audio-block {
+  margin: 0.5rem 0 1.5rem;
+  padding: 1.35rem 1.35rem 1.5rem;
+  border-radius: 1.1rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.62);
+  box-shadow: 0 14px 40px rgba(11, 61, 74, 0.06);
+  max-width: 36rem;
+  animation: rise-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.audio-block h2 {
+  margin: 0 0 0.55rem;
+  font-family: var(--display);
+  font-size: 1.35rem;
+  color: var(--primary);
+}
+
+.audio-caption {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.audio-player {
+  display: block;
+  width: 100%;
+  height: 2.75rem;
 }
 
 .film-placeholder {

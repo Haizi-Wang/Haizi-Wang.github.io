@@ -172,7 +172,7 @@ export default function App() {
   const wide = lang === 'en' || lang === 'de'
 
   return (
-    <main className="shell relative min-h-screen overflow-x-hidden px-4 py-8 text-[color:var(--ink)] sm:px-6 lg:py-10">
+    <div className="shell relative min-h-0 min-w-0 overflow-visible px-4 py-5 text-[color:var(--ink)] sm:px-6 lg:py-6">
       <div
         className="orb hidden lg:block"
         style={{
@@ -198,7 +198,7 @@ export default function App() {
       />
 
       <div
-        className={`mx-auto grid max-w-6xl gap-6 ${wide ? 'lg:grid-cols-[400px_1fr]' : 'lg:grid-cols-[360px_1fr]'}`}
+        className={`mx-auto grid w-full min-w-0 max-w-6xl gap-5 lg:gap-6 ${wide ? 'lg:grid-cols-[minmax(240px,0.36fr)_minmax(0,1fr)]' : 'lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,1fr)]'}`}
       >
         <section className="panel relative min-w-0 rounded-[1.4rem] p-5 sm:p-6">
           <div
@@ -427,8 +427,8 @@ export default function App() {
           </div>
         </section>
 
-        <section className="flex flex-col gap-4" style={{ animationDelay: '80ms' }}>
-          <div className="grid gap-3 sm:grid-cols-2">
+        <section className="flex min-w-0 flex-col gap-4" style={{ animationDelay: '80ms' }}>
+          <div className="grid min-w-0 gap-3 sm:grid-cols-2">
             <article className="panel rounded-[1.25rem] p-4 sm:p-5">
               <h2 className="text-sm font-medium text-[color:var(--muted)]">{t.withdrawTitle}</h2>
               <p className="result-value mt-1">
@@ -475,6 +475,6 @@ export default function App() {
           </article>
         </section>
       </div>
-    </main>
+    </div>
   )
 }
