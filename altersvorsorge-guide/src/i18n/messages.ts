@@ -157,7 +157,7 @@ export const messages = {
         "第二档：超过 360 欧元之后最多再 1,440 欧元自付 → 按 25% 匹配。自付合计 1,800 欧元时，基本补贴合计最高 540 欧元。",
         "最低自付：每年 120 欧元是门槛之一，不是拿到最高补贴的充分条件。",
       ],
-      childTitle: "有孩子家庭怎么补",
+      childTitle: "有孩子家庭怎么补贴",
       child:
         "每个符合条件的孩子，按父母自付金额提供最高每年 300 欧元的 100% 匹配（以法定资格与归属规则为准）。儿童补贴进入父母一方的账户，不可由父母双方对同一孩子重复领取。",
       exampleTitle: "算例：每月自付 30 欧元（年缴 360 欧元），父母符合直接资格",
@@ -420,7 +420,7 @@ export const messages = {
         "Tier 2: up to another €1,440 above €360 → 25% match. At €1,800 own contributions, basic subsidy tops out at €540.",
         "Minimum own contribution: €120 / year is a threshold, not enough by itself for the maximum subsidy.",
       ],
-      childTitle: "Families with children",
+      childTitle: "How do families with children get subsidies?",
       child:
         "For each qualifying child, parents can receive up to €300 / year as a 100% match of own contributions (subject to legal entitlement and assignment rules). Child subsidy goes into one parent’s account and cannot be claimed twice for the same child.",
       exampleTitle:
