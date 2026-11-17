@@ -137,6 +137,9 @@ export const messages = {
       openTitle: "开户",
       open:
         "符合准入条件的人，可通过获准提供商开立认证 Altersvorsorgedepot（或在规则允许时，将既有合同转入新补贴体系）。开户后按年/按月自付缴费，补贴于次年核实后打入账户。",
+      typesTitle: "两种账户类型",
+      types:
+        "标准（基础）养老投资账户 (Standarddepot, 全自动、预设配置、封闭管理) 和 自主养老投资账户 (Individuelles Altersvorsorgedepot)。",
       howManyTitle: "一个人可以开几个账户？",
       howMany1a: "不包括已经开办的 Riester 账号，一名纳税人",
       howManyMax: "最多 2 个",
@@ -405,6 +408,9 @@ export const messages = {
       openTitle: "Opening an account",
       open:
         "Eligible people can open a certified Altersvorsorgedepot with an authorised provider (or, where allowed, transfer an existing contract into the new subsidy system). After opening, pay yearly/monthly own contributions; subsidies are credited after verification in the following year.",
+      typesTitle: "Two account types",
+      types:
+        "The standard (basic) pension investment account (Standarddepot: fully automatic, default allocation, closed management) and the self-directed pension investment account (Individuelles Altersvorsorgedepot).",
       howManyTitle: "How many accounts can one person open?",
       howMany1a:
         "Existing Riester contracts do not count toward this limit; a taxpayer may have at most ",
