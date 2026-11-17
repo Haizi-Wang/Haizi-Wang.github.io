@@ -487,9 +487,12 @@ a:hover {
   margin-top: 0.35rem;
 }
 
-/* One clear blank line above end-of-page next / calculator CTAs. */
+/* Unmistakable blank line above end-of-page next / calculator CTAs.
+   Use padding + margin so the gap survives margin collapse / resets. */
 .prose > p.prose-cta {
-  margin-top: 1.85rem;
+  margin-top: 2.75rem !important;
+  padding-top: 0.85rem;
+  border-top: 1px solid transparent;
 }
 
 .callout {
