@@ -49,6 +49,7 @@ export default function Withdrawal() {
         <h2>{w.feeTitle}</h2>
         <p>{w.fee}</p>
 
+        <div className="prose-cta-spacer" aria-hidden="true" />
         <p className="prose-cta">
           {w.nextBefore}
           <Link to="/rechner">{w.nextLink}</Link>

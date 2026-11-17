@@ -74,6 +74,7 @@ export default function Process() {
             <li key={item}>{item}</li>
           ))}
         </ul>
+        <div className="prose-cta-spacer" aria-hidden="true" />
         <p className="prose-cta">
           {p.nextBefore}
           <Link to="/rechner">{p.nextCalc}</Link>

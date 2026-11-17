@@ -44,6 +44,7 @@ export default function Eligibility() {
           {e.bonus}
         </div>
 
+        <div className="prose-cta-spacer" aria-hidden="true" />
         <p className="prose-cta">
           {e.next} <Link to="/process">{e.nextLink}</Link>
         </p>
