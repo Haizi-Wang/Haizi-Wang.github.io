@@ -138,10 +138,10 @@ export const messages = {
       open:
         "符合准入条件的人，可通过获准提供商开立认证 Altersvorsorgedepot（或在规则允许时，将既有合同转入新补贴体系）。开户后按年/按月自付缴费，补贴于次年核实后打入账户。",
       howManyTitle: "一个人可以开几个账户？",
-      howMany1a: "可以开多个账户，但自 2027-01-01 起，一名纳税人",
+      howMany1a: "不包括已经开办的 Riester 账号，一名纳税人",
       howManyMax: "最多 2 个",
       howMany1b:
-        "享受国家税收优惠与补贴的认证养老合同。第 3 个及以后按签署先后判定，通常不再视为受补贴缴费。补贴与缴费上限按",
+        "享受国家税收优惠与补贴的认证养老合同。补贴与缴费上限按",
       howManyPer: "人头合计",
       howMany1c: "，不会因账户变多而翻倍：",
       howManyItems: [
@@ -400,12 +400,13 @@ export const messages = {
       open:
         "Eligible people can open a certified Altersvorsorgedepot with an authorised provider (or, where allowed, transfer an existing contract into the new subsidy system). After opening, pay yearly/monthly own contributions; subsidies are credited after verification in the following year.",
       howManyTitle: "How many accounts can one person open?",
-      howMany1a: "You may open more than one, but from 2027-01-01 a taxpayer may hold at most ",
+      howMany1a:
+        "Existing Riester contracts do not count toward this limit; a taxpayer may have at most ",
       howManyMax: "two",
       howMany1b:
-        " certified pension contracts that enjoy state tax relief and subsidies. A 3rd+ contract is judged by signing order and usually no longer counts as subsidised. Subsidy and contribution caps are ",
-      howManyPer: "per person in total",
-      howMany1c: " — more accounts do not multiply the ceiling:",
+        " certified retirement contracts that receive state tax relief and subsidies. Subsidy and contribution caps are ",
+      howManyPer: "per person",
+      howMany1c: " and do not multiply with more accounts:",
       howManyItems: [
         "Basic subsidy up to about €540 / year (matched to contributions)",
         "Child subsidy: up to about €300 / year per qualifying child",
