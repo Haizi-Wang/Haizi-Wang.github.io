@@ -23,7 +23,12 @@ npm run build
 # 然后提交并 push 到 main
 ```
 
-`base` 为 `/altersvorsorge-guide/`。`404.html` 与 `index.html` 相同，供 `/rechner`、`/film` 等 SPA 深链。开发用 `index.source.html`（`npm run dev` 会先还原）。
+`base` 为 `/altersvorsorge-guide/`。发布同步会写入：
+- `404.html`（指南目录内）
+- 各路由 `rechner/index.html`、`film/index.html` 等（GitHub user Pages 对子路径不读子目录 `404.html`，需物理文件才返回 200）
+- 仓库根 `404.html`（未匹配路径时的 SPA 回退）
+
+开发用 `index.source.html`（`npm run dev` 会先还原）。
 
 ## 计算器
 

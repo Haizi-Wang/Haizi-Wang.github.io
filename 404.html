@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <script>
+      (function () {
+        var path = location.pathname + location.search + location.hash;
+        try { sessionStorage.setItem("av-guide-redirect", path); } catch (e) {}
+        if (path.indexOf("/altersvorsorge-guide/") === 0) {
+          location.replace("/altersvorsorge-guide/" + location.search + location.hash);
+        } else {
+          location.replace("/");
+        }
+      })();
+    </script>
+    <meta http-equiv="refresh" content="0;url=/" />
+  </head>
+  <body></body>
+</html>
