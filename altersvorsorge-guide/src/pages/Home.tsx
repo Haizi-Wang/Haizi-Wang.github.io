@@ -5,13 +5,13 @@ const path = [
     to: "/eligibility",
     step: "01",
     title: "准入条件",
-    text: "谁可以直接或间接享受补助，最低缴费与账户数量上限。",
+    text: "谁可以直接或间接享受补助，以及最低缴费与年龄等门槛。",
   },
   {
     to: "/process",
     step: "02",
     title: "过程",
-    text: "2027 起补助怎么算、有孩家庭算例，以及与旧 Riester 的关系。",
+    text: "开户、缴费和补助：账户数量、缴费规则、儿童补助算例。",
   },
   {
     to: "/investing",
