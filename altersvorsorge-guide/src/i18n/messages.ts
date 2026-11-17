@@ -248,6 +248,9 @@ export const messages = {
         "保留账户、暂停缴费：资金可继续投资；离境后通常不再获得新补贴。达退休年龄后可申请跨境发放。",
         "迁居至其他 EU/EWR 国家并保持账户，通常不因迁居本身即被认定为有害提取；彻底迁出并解约清算则按有害提取规则处理。",
       ],
+      inheritTitle: "继承",
+      inherit:
+        "如果投资人不幸身亡，配偶和子女有权利继承，继承账户余额的方式主要取决于是否进入退休提领期，继承人的身份状态以及选择的提取/转接形式。",
       nextBefore: "用数字检验自己的缴费与提领情景： ",
       nextLink: "打开计算器 →",
     },
@@ -512,6 +515,9 @@ export const messages = {
         "Keep the account, pause contributions: assets can stay invested; new subsidies usually stop after leaving. After retirement age you may apply for cross-border payouts.",
         "Moving to another EU/EEA country while keeping the account is usually not harmful merely because of the move; full exit with cancellation is treated under harmful-withdrawal rules.",
       ],
+      inheritTitle: "Inheritance",
+      inherit:
+        "If the account holder dies, the spouse and children have a right to inherit. How the account balance is inherited mainly depends on whether the retirement payout phase has already begun, the heirs’ status, and the chosen form of withdrawal or transfer.",
       nextBefore: "Check your contribution and payout scenarios: ",
       nextLink: "Open calculator →",
     },

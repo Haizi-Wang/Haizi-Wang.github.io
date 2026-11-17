@@ -43,6 +43,9 @@ export default function Withdrawal() {
           ))}
         </ul>
 
+        <h2>{w.inheritTitle}</h2>
+        <p>{w.inherit}</p>
+
         <p>
           {w.nextBefore}
           <Link to="/rechner">{w.nextLink}</Link>
