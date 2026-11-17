@@ -1,107 +1,81 @@
 import { Link } from "react-router-dom";
+import { useI18n } from "../i18n/I18nProvider";
 
 export default function Process() {
+  const { t } = useI18n();
+  const p = t.process;
+
   return (
     <>
       <header className="page-head">
-        <h1>开户、缴费和补贴</h1>
+        <h1>{p.title}</h1>
       </header>
 
       <article className="prose">
-        <h2>Altersvorsorgedepot 是什么</h2>
+        <h2>{p.whatTitle}</h2>
+        <p>{p.what1}</p>
         <p>
-          Altersvorsorgedepot（养老投资账户）是经过法定认证的私人养老产品：在符合规定的范围内，可用基金、ETF
-          等工具为退休积累资产，并获得国家补贴与相应税收安排。
-        </p>
-        <p>
-          它<strong>不是</strong>普通证券账户。在券商账户里每月买 ETF，并不会因此自动获得 Zulage。养老投资账户须满足认证要求；投资与提款受养老制度约束；不符合规定的提前提取可能触发补贴追回与税务后果。
-        </p>
-
-        <h2>开户</h2>
-        <p>
-          符合准入条件的人，可通过获准提供商开立认证 Altersvorsorgedepot（或在规则允许时，将既有合同转入新补贴体系）。开户后按年/按月自付缴费，补贴于次年核实后打入账户。
+          {p.what2a}
+          <strong>{p.what2Not}</strong>
+          {p.what2b}
         </p>
 
-        <h3>一个人可以开几个账户？</h3>
+        <h2>{p.openTitle}</h2>
+        <p>{p.open}</p>
+
+        <h3>{p.howManyTitle}</h3>
         <p>
-          可以开多个账户，但自 2027-01-01
-          起，一名纳税人<strong>最多 2 个</strong>享受国家税收优惠与补贴的认证养老合同。第
-          3 个及以后按签署先后判定，通常不再视为受补贴缴费。补贴与缴费上限按<strong>人头合计</strong>，不会因账户变多而翻倍：
+          {p.howMany1a}
+          <strong>{p.howManyMax}</strong>
+          {p.howMany1b}
+          <strong>{p.howManyPer}</strong>
+          {p.howMany1c}
         </p>
         <ul>
-          <li>基础补贴最高约 540 欧元 / 年（按缴费金额匹配）</li>
-          <li>儿童补贴：每名符合条件子女最高约 300 欧元 / 年</li>
-          <li>与税前扣除相关的常见口径约 1,800 欧元 / 年；总自付上限约 6,840 欧元 / 年</li>
+          {p.howManyItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
-        <p>
-          两个账户的实际好处在于策略分散（如一户偏股票 ETF、一户偏稳健）、新旧合同过渡，以及提领安排更灵活——总额度并不增加。
-        </p>
+        <p>{p.howMany2}</p>
 
-        <h2>基本补贴怎么算</h2>
+        <h2>{p.basicTitle}</h2>
         <ul>
-          <li>
-            <strong>第一档</strong>：每年自付前 360 欧元 → 国家按 <strong>50%</strong>{" "}
-            匹配（存 360 欧元 → 基本补贴 180 欧元）。
-          </li>
-          <li>
-            <strong>第二档</strong>：超过 360 欧元之后最多再 1,440 欧元自付 → 按{" "}
-            <strong>25%</strong> 匹配。自付合计 1,800 欧元时，基本补贴合计最高{" "}
-            <strong>540 欧元</strong>。
-          </li>
-          <li>
-            <strong>最低自付</strong>：每年 120 欧元是门槛之一，不是拿到最高补贴的充分条件。
-          </li>
+          {p.basicItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
 
-        <h2>有孩子家庭怎么补</h2>
-        <p>
-          每个符合条件的孩子，按父母自付金额提供最高每年 <strong>300 欧元</strong>
-          的 100% 匹配（以法定资格与归属规则为准）。儿童补贴进入父母一方的账户，不可由父母双方对同一孩子重复领取。
-        </p>
+        <h2>{p.childTitle}</h2>
+        <p>{p.child}</p>
 
         <div className="example">
-          <h3>算例：每月自付 30 欧元（年缴 360 欧元），父母符合直接资格</h3>
+          <h3>{p.exampleTitle}</h3>
           <dl>
-            <dt>无孩 · 基本补贴</dt>
-            <dd>180 欧元</dd>
-            <dt>无孩 · 年底总额（自付360欧元 +补贴180欧元）</dt>
-            <dd>540 欧元</dd>
-            <dt>一孩 · 补贴合计</dt>
-            <dd>480 欧元</dd>
-            <dt>一孩 · 年底总额（自付360欧元 +补贴480欧元）</dt>
-            <dd>840 欧元</dd>
-            <dt>两孩 · 补贴合计</dt>
-            <dd>780 欧元</dd>
-            <dt>两孩 · 年底总额（自付360欧元 +补贴780欧元）</dt>
-            <dd>1,140 欧元</dd>
-            <dt>三孩 · 补贴合计</dt>
-            <dd>1,080 欧元</dd>
+            {p.exampleRows.flatMap((row) => [
+              <dt key={`${row.dt}-dt`}>{row.dt}</dt>,
+              <dd key={`${row.dt}-dd`}>{row.dd}</dd>,
+            ])}
             <div className="total">
-              <span>三孩 · 年底总额（自付360欧元 +补贴1,080欧元）</span>
-              <span>1,440 欧元</span>
+              <span>{p.exampleTotal}</span>
+              <span>{p.exampleTotalVal}</span>
             </div>
           </dl>
           <p style={{ margin: "0.8rem 0 0", fontSize: "0.9rem", color: "var(--muted)" }}>
-            以上为条件全部满足时的总额，非保证账户市值。资格、孩子条件、补贴归属与合同认证缺一不可。只要成年孩子符合领儿童金条件，父母就享有同样的儿童补贴。同时成年孩子只要自己缴纳法定养老保险，也可以独立开立账户，自付缴费，满足条件时领取基础补贴。
+            {p.exampleNote}
           </p>
         </div>
 
-        <h2>现有 Riester 合同</h2>
+        <h2>{p.riesterTitle}</h2>
         <ul>
-          <li>
-            <strong>既有合同保护（Bestandsschutz）</strong>
-            ：旧 Riester 合同不会自动失效，也不会自动变成 Altersvorsorgedepot；可以继续按旧制缴费。
-          </li>
-          <li>
-            符合条件时，可选择转入新补贴体系，或另开认证养老投资账户；依法已获补贴通常不因合规转换而一律退还，但仍可能涉及费用、保证权益与风险变化。
-          </li>
-          <li>
-            若持有多个旧合同：将其中一个转入新体系，可能影响其他合同——不能假设“只改一个、其余完全不受影响”。
-          </li>
+          {p.riesterItems.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
         </ul>
         <p>
-          可用 <Link to="/rechner">计算器</Link> 比较不同缴费情景。接下来看账户里能买什么：{" "}
-          <Link to="/investing">选基金 →</Link>
+          {p.nextBefore}
+          <Link to="/rechner">{p.nextCalc}</Link>
+          {p.nextMid}
+          <Link to="/investing">{p.nextInvest}</Link>
         </p>
       </article>
     </>
