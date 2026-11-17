@@ -191,6 +191,15 @@ a:hover {
   animation: rise-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+.main--rechner {
+  max-width: none;
+  padding: 0.5rem 0 2rem;
+}
+
+.rechner-page {
+  width: 100%;
+}
+
 .hero {
   padding: 1.5rem 0 2rem;
   max-width: 40rem;

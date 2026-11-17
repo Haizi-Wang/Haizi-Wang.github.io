@@ -172,7 +172,7 @@ export default function App() {
   const wide = lang === 'en' || lang === 'de'
 
   return (
-    <main className="shell relative min-h-screen overflow-x-hidden px-4 py-8 text-[color:var(--ink)] sm:px-6 lg:py-10">
+    <div className="shell relative min-h-[70vh] overflow-x-hidden px-4 py-6 text-[color:var(--ink)] sm:px-6 lg:py-8">
       <div
         className="orb hidden lg:block"
         style={{
@@ -475,6 +475,6 @@ export default function App() {
           </article>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 
 const links = [
   { to: "/", label: "概览", end: true },
@@ -11,6 +11,9 @@ const links = [
 ] as const;
 
 export default function Layout() {
+  const { pathname } = useLocation();
+  const isRechner = pathname === "/rechner";
+
   return (
     <div className="site">
       <header className="site-header">
@@ -34,7 +37,7 @@ export default function Layout() {
         </div>
       </header>
 
-      <main className="main">
+      <main className={isRechner ? "main main--rechner" : "main"}>
         <Outlet />
       </main>
 
@@ -49,13 +52,7 @@ export default function Layout() {
           </p>
           <div className="footer-meta">
             <span>默认语言：简体中文（zh-CN）</span>
-            <a
-              href="https://deutsch-alterversorge-rechner.apps.grok.bot"
-              target="_blank"
-              rel="noreferrer"
-            >
-              独立计算器
-            </a>
+            <NavLink to="/rechner">站内计算器</NavLink>
             <a
               href="https://github.com/Haizi-Wang/Haizi-Wang.github.io/tree/main/altersvorsorge-guide"
               target="_blank"
