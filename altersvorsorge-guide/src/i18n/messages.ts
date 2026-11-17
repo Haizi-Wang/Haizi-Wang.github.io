@@ -10,7 +10,7 @@ export const messages = {
       investing: "选基金",
       withdrawal: "退出提领",
       rechner: "计算器",
-      film: "介绍影片",
+      film: "影音资料",
       aria: "主导航",
     },
     lang: {
@@ -252,7 +252,7 @@ export const messages = {
       nextLink: "打开计算器 →",
     },
     film: {
-      title: "介绍影片",
+      title: "影音资料",
       lead: "先听口播说明；成片与分镜将在后续里程碑上线。",
       audioTitle: "口播音频",
       audioCaption:
@@ -272,7 +272,7 @@ export const messages = {
       investing: "Investing",
       withdrawal: "Withdrawal",
       rechner: "Calculator",
-      film: "Intro film",
+      film: "Audio & video",
       aria: "Main navigation",
     },
     lang: {
@@ -515,7 +515,7 @@ export const messages = {
       nextLink: "Open calculator →",
     },
     film: {
-      title: "Intro film",
+      title: "Audio & video",
       lead: "Start with the voice-over; the finished film and storyboard will follow in a later milestone.",
       audioTitle: "Voice-over audio",
       audioCaption:

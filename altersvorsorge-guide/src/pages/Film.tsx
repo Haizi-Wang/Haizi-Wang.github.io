@@ -1,6 +1,6 @@
 import { useI18n } from "../i18n/I18nProvider";
 
-const AUDIO_SRC = `${import.meta.env.BASE_URL}assets/yanglao-cun300-song1050.m4a`;
+const AUDIO_SRC = `${import.meta.env.BASE_URL}assets/alterversorge.mp3`;
 
 export default function Film() {
   const { t } = useI18n();
