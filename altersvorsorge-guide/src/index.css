@@ -110,6 +110,7 @@ a:hover {
 
 .site {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
@@ -236,17 +237,29 @@ a:hover {
 }
 
 .main--rechner {
+  flex: 1 1 auto;
+  min-height: 0;
   max-width: 100%;
   margin-inline: auto;
-  padding: 0.75rem clamp(1.25rem, 4vw, 2.5rem) 2.5rem;
-  overflow-x: clip;
+  padding: 0.75rem clamp(1rem, 3.5vw, 2rem) 1.5rem;
+  /* Scale-to-fit owns clipping inside .rechner-scale-slot; do not clip here. */
+  overflow: visible;
 }
 
 .rechner-page {
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow-x: clip;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+}
+
+.rechner-scale-slot {
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
 }
 
 .rechner-fit {
@@ -254,23 +267,45 @@ a:hover {
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  transform-origin: top left;
+}
+
+.rechner-fit--scaled {
+  max-width: none;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .rechner-page .shell {
-  overflow-x: visible !important;
+  overflow: visible !important;
   max-width: 100%;
+  min-height: 0 !important;
   box-sizing: border-box;
-  padding-left: clamp(0.85rem, 2.2vw, 1.35rem) !important;
-  padding-right: clamp(0.85rem, 2.2vw, 1.35rem) !important;
+  padding-left: clamp(0.75rem, 2vw, 1.25rem) !important;
+  padding-right: clamp(0.75rem, 2vw, 1.25rem) !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+}
+
+/* Shorter charts + scrollable notes so embed height can fit the viewport. */
+.rechner-page .chart-scroll {
+  max-height: 14rem;
+}
+
+.rechner-page .shell > .grid > section.panel > .mt-6.border-t {
+  max-height: 9.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
 }
 
 .rechner-page .panel {
-  padding: 1.35rem clamp(1.15rem, 3vw, 1.85rem) !important;
+  padding: 1.15rem clamp(1rem, 2.5vw, 1.5rem) !important;
 }
 
 @media (min-width: 640px) {
   .rechner-page .panel {
-    padding: 1.55rem clamp(1.35rem, 3.5vw, 2rem) !important;
+    padding: 1.35rem clamp(1.15rem, 3vw, 1.75rem) !important;
   }
 }
 

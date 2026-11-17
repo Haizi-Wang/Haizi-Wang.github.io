@@ -172,7 +172,7 @@ export default function App() {
   const wide = lang === 'en' || lang === 'de'
 
   return (
-    <div className="shell relative min-h-[70vh] min-w-0 overflow-x-visible px-4 py-6 text-[color:var(--ink)] sm:px-6 lg:py-8">
+    <div className="shell relative min-h-0 min-w-0 overflow-visible px-4 py-5 text-[color:var(--ink)] sm:px-6 lg:py-6">
       <div
         className="orb hidden lg:block"
         style={{
