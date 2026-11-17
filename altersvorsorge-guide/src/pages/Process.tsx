@@ -74,7 +74,7 @@ export default function Process() {
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p>
+        <p className="prose-cta">
           {p.nextBefore}
           <Link to="/rechner">{p.nextCalc}</Link>
           {p.nextMid}

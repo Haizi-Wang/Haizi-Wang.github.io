@@ -44,7 +44,7 @@ export default function Eligibility() {
           {e.bonus}
         </div>
 
-        <p>
+        <p className="prose-cta">
           {e.next} <Link to="/process">{e.nextLink}</Link>
         </p>
       </article>
