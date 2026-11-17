@@ -344,7 +344,7 @@ export const messages = {
           to: "/withdrawal",
           step: "04",
           title: "Exit / Withdrawal / Inheritance",
-          text: "Payout phase, 30% lump sum, harmful withdrawals, tax treatment, and moving abroad.",
+          text: "Payout phase, 30% lump sum, harmful withdrawals, tax treatment, moving abroad, and inheritance.",
         },
       ],
     },
@@ -498,7 +498,7 @@ export const messages = {
     withdrawal: {
       title: "Exit / Withdrawal / Inheritance",
       lead:
-        "Payout start, 30% lump sum, harmful withdrawals, tax differences for subsidised vs unsubsidised capital, and options when moving abroad.",
+        "Payout start, 30% lump sum, harmful withdrawals, tax differences for subsidised vs unsubsidised capital, moving abroad, inheritance, and payout-phase fees.",
       startTitle: "Payout phase: up to 30% lump sum",
       start1:
         "When the Auszahlungsphase begins (typically around ages 65–70), certified contracts usually allow a one-off withdrawal of up to 30% of account assets with no special purpose. The rest goes into a monthly plan (at least until about age 85) or a lifelong annuity under statutory rules.",

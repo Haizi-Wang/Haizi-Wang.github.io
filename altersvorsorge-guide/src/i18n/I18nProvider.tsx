@@ -19,6 +19,16 @@ type I18nValue = {
 
 const I18nContext = createContext<I18nValue | null>(null);
 
+function readQueryLang(): Lang | null {
+  try {
+    const q = new URLSearchParams(window.location.search).get("lang");
+    if (q === "en" || q === "zh") return q;
+  } catch {
+    /* ignore */
+  }
+  return null;
+}
+
 function readStoredLang(): Lang {
   try {
     const saved = window.localStorage.getItem(LANG_STORAGE_KEY);
@@ -29,11 +39,24 @@ function readStoredLang(): Lang {
   return "zh";
 }
 
+function resolveInitialLang(): Lang {
+  return readQueryLang() ?? readStoredLang();
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>("zh");
 
   useEffect(() => {
-    setLangState(readStoredLang());
+    const next = resolveInitialLang();
+    setLangState(next);
+    // Persist ?lang= so subsequent navigations keep the locale.
+    if (readQueryLang()) {
+      try {
+        window.localStorage.setItem(LANG_STORAGE_KEY, next);
+      } catch {
+        /* ignore */
+      }
+    }
   }, []);
 
   const setLang = useCallback((next: Lang) => {
