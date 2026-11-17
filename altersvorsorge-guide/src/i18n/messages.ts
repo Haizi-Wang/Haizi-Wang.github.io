@@ -8,7 +8,7 @@ export const messages = {
       eligibility: "准入条件",
       process: "过程",
       investing: "选基金",
-      withdrawal: "退出提领",
+      withdrawal: "退出 / 提领/继承",
       rechner: "计算器",
       film: "影音资料",
       aria: "主导航",
@@ -30,7 +30,7 @@ export const messages = {
     },
     home: {
       lead:
-        "德国养老投资账户——从 2027 年起逐步承接国家补贴型私人养老的新路径。本站用正式、可核对的说明，带你走完：准入 → 过程 → 选基金 → 退出提领，并可打开计算器做情景测算。",
+        "德国养老投资账户——从 2027 年起逐步承接国家补贴型私人养老的新路径。本站用正式、可核对的说明，带你走完：准入 → 过程 → 选基金 → 退出 / 提领/继承，并可打开计算器做情景测算。",
       ctaEligibility: "从准入条件开始",
       ctaCalc: "打开计算器",
       switchHint: "Switch to English",
@@ -72,7 +72,7 @@ export const messages = {
         {
           to: "/withdrawal",
           step: "04",
-          title: "退出 / 提领",
+          title: "退出 / 提领/继承",
           text: "提领期、30% 一次性提取、有害提取、税务与迁居注意点。",
         },
       ],
@@ -217,10 +217,10 @@ export const messages = {
         "取消强制最低本金保底后，投资者可在合规范围内提高股票型 ETF 比重——收益潜力与波动风险同步上升。判断产品是否值得，不能只看补贴，还要看长期净收益与自己能否承受回撤。如果不愿意承担市场波动风险的投资者，仍可选择大部分或全部投入本金及国家补贴保底的传统投资产品。",
       retireTitle: "到达退休年龄",
       retireBefore: "提领、迁居与税务安排见： ",
-      retireLink: "退出 / 提领 →",
+      retireLink: "退出 / 提领/继承 →",
     },
     withdrawal: {
-      title: "退出 / 提领",
+      title: "退出 / 提领/继承",
       lead:
         "提领期起点、30% 一次性提取、有害提取、受补贴与未受补贴资金的税务差异，以及迁居时的路径选择。",
       startTitle: "提领期起点：最高 30% 一次性提取",
@@ -270,7 +270,7 @@ export const messages = {
       eligibility: "Eligibility",
       process: "Process",
       investing: "Investing",
-      withdrawal: "Withdrawal",
+      withdrawal: "Exit / Withdrawal / Inheritance",
       rechner: "Calculator",
       film: "Audio & video",
       aria: "Main navigation",
@@ -292,7 +292,7 @@ export const messages = {
     },
     home: {
       lead:
-        "Germany’s certified pension investment account — from 2027 a new path for state-supported private retirement saving. This guide walks you through eligibility → process → investing → withdrawal, with an on-site calculator for scenarios.",
+        "Germany’s certified pension investment account — from 2027 a new path for state-supported private retirement saving. This guide walks you through eligibility → process → investing → exit / withdrawal / inheritance, with an on-site calculator for scenarios.",
       ctaEligibility: "Start with eligibility",
       ctaCalc: "Open calculator",
       switchHint: "切换到中文",
@@ -334,7 +334,7 @@ export const messages = {
         {
           to: "/withdrawal",
           step: "04",
-          title: "Withdrawal",
+          title: "Exit / Withdrawal / Inheritance",
           text: "Payout phase, 30% lump sum, harmful withdrawals, tax treatment, and moving abroad.",
         },
       ],
@@ -481,10 +481,10 @@ export const messages = {
         "With no mandatory capital guarantee, investors may raise equity-ETF weight within the rules — higher return potential and higher drawdown risk. Judge products by long-term net return and your ability to bear losses, not by subsidy alone. Investors who prefer not to take market risk can still put most or all of their money into traditional products that guarantee own capital and state subsidies.",
       retireTitle: "Reaching retirement age",
       retireBefore: "For withdrawals, relocation and tax: ",
-      retireLink: "Withdrawal →",
+      retireLink: "Exit / Withdrawal / Inheritance →",
     },
     withdrawal: {
-      title: "Withdrawal",
+      title: "Exit / Withdrawal / Inheritance",
       lead:
         "Payout start, 30% lump sum, harmful withdrawals, tax differences for subsidised vs unsubsidised capital, and options when moving abroad.",
       startTitle: "Payout phase: up to 30% lump sum",
