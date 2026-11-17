@@ -5,13 +5,13 @@ const path = [
     to: "/eligibility",
     step: "01",
     title: "准入条件",
-    text: "谁可以直接或间接享受补助，以及最低缴费与年龄等门槛。",
+    text: "谁可以直接或间接享受补贴，以及最低缴费与年龄等门槛。",
   },
   {
     to: "/process",
     step: "02",
     title: "过程",
-    text: "开户、缴费和补助：账户数量、缴费规则、儿童补助算例。",
+    text: "开户、缴费和补贴：账户数量、缴费规则、儿童补贴算例。",
   },
   {
     to: "/investing",
@@ -36,7 +36,7 @@ export default function Home() {
           Altersvorsorgedepot
         </h1>
         <p className="hero-lead">
-          德国养老投资账户——从 2027 年起逐步承接国家补助型私人养老的新路径。
+          德国养老投资账户——从 2027 年起逐步承接国家补贴型私人养老的新路径。
           本站用正式、可核对的说明，带你走完：准入 → 过程 → 选基金 → 退出提领，并可打开计算器做情景测算。
         </p>
         <div className="cta-row">
@@ -52,13 +52,13 @@ export default function Home() {
       <section className="prose" aria-labelledby="why-title">
         <h2 id="why-title">为什么值得认真弄明白</h2>
         <p>
-          过去熟悉的 Riester-Rente，将从 2027 年起由新的国家补助型私人养老产品体系逐步取代。
+          过去熟悉的 Riester-Rente，将从 2027 年起由新的国家补贴型私人养老产品体系逐步取代。
           其中最引人关注的是经过认证的 <strong>Altersvorsorgedepot</strong>：
-          在符合规定的前提下，可用基金、ETF 等工具为退休积累资产，并获得国家补助。
+          在符合规定的前提下，可用基金、ETF 等工具为退休积累资产，并获得国家补贴。
         </p>
         <div className="callout">
           <strong>提醒：</strong>
-          国家补助高，不等于任何产品都值得购买。养老金不只是看今天能获得多少补助，还要看几十年以后真正能够留下多少资产。
+          国家补贴高，不等于任何产品都值得购买。养老金不只是看今天能获得多少补贴，还要看几十年以后真正能够留下多少资产。
         </div>
 
         <h2>立法时间线（摘要）</h2>
@@ -81,7 +81,7 @@ export default function Home() {
           </li>
           <li>
             <time>2027-01-01</time>
-            新产品及补助体系主要规定开始实施
+            新产品及补贴体系主要规定开始实施
           </li>
         </ul>
       </section>
