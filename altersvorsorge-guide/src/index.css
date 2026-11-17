@@ -232,11 +232,13 @@ a:hover {
 }
 
 .hero-title {
-  margin: 0 0 0.85rem;
+  margin: 0 0 1.15rem;
+  padding-bottom: 0.12em;
   font-family: var(--display);
   font-size: clamp(2.1rem, 5vw, 3.15rem);
-  line-height: 1.12;
+  line-height: 1.28;
   letter-spacing: -0.02em;
+  overflow: visible;
   background: linear-gradient(120deg, #0b3d4a, #1f6b52, #2a7a8c, #0b3d4a);
   background-size: 220% 220%;
   -webkit-background-clip: text;
@@ -246,8 +248,9 @@ a:hover {
 }
 
 .hero-lead {
-  margin: 0 0 1.4rem;
+  margin: 0.15rem 0 1.4rem;
   font-size: 1.08rem;
+  line-height: 1.65;
   color: var(--muted);
   max-width: 36rem;
 }
