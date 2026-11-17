@@ -49,7 +49,7 @@ export default function Withdrawal() {
         <h2>{w.feeTitle}</h2>
         <p>{w.fee}</p>
 
-        <p>
+        <p className="prose-cta">
           {w.nextBefore}
           <Link to="/rechner">{w.nextLink}</Link>
         </p>

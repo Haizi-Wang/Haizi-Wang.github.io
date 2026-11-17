@@ -42,7 +42,7 @@ export default function Investing() {
         <p>{i.riskTolerance}</p>
 
         <h2>{i.retireTitle}</h2>
-        <p>
+        <p className="prose-cta">
           {i.retireBefore}
           <Link to="/withdrawal">{i.retireLink}</Link>
         </p>

@@ -487,6 +487,11 @@ a:hover {
   margin-top: 0.35rem;
 }
 
+/* One clear blank line above end-of-page next / calculator CTAs. */
+.prose > p.prose-cta {
+  margin-top: 1.85rem;
+}
+
 .callout {
   margin: 1.25rem 0;
   padding: 1rem 1.1rem;
