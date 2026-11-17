@@ -23,6 +23,9 @@ export default function Process() {
         <h2>{p.openTitle}</h2>
         <p>{p.open}</p>
 
+        <h3>{p.typesTitle}</h3>
+        <p>{p.types}</p>
+
         <h3>{p.howManyTitle}</h3>
         <p>
           {p.howMany1a}
