@@ -41,10 +41,10 @@ export default function Process() {
         <ul>
           <li>
             <strong>第一档</strong>：每年自付前 360 欧元 → 国家按 <strong>50%</strong>{" "}
-            匹配（存 360 → 基本补贴 180）。
+            匹配（存 360 欧元 → 基本补贴 180 欧元）。
           </li>
           <li>
-            <strong>第二档</strong>：超过 360 之后最多再 1,440 欧元自付 → 按{" "}
+            <strong>第二档</strong>：超过 360 欧元之后最多再 1,440 欧元自付 → 按{" "}
             <strong>25%</strong> 匹配。自付合计 1,800 欧元时，基本补贴合计最高{" "}
             <strong>540 欧元</strong>。
           </li>
@@ -60,25 +60,25 @@ export default function Process() {
         </p>
 
         <div className="example">
-          <h3>算例：每月自付 30 欧元（年缴 360），父母符合直接资格</h3>
+          <h3>算例：每月自付 30 欧元（年缴 360 欧元），父母符合直接资格</h3>
           <dl>
             <dt>无孩 · 基本补贴</dt>
-            <dd>180 €</dd>
-            <dt>无孩 · 年底总额（自付+补贴）</dt>
-            <dd>540 €</dd>
+            <dd>180 欧元</dd>
+            <dt>无孩 · 年底总额（自付360欧元 +补贴180欧元）</dt>
+            <dd>540 欧元</dd>
             <dt>一孩 · 补贴合计</dt>
-            <dd>480 €</dd>
-            <dt>一孩 · 年底总额</dt>
-            <dd>840 €</dd>
+            <dd>480 欧元</dd>
+            <dt>一孩 · 年底总额（自付360欧元 +补贴480欧元）</dt>
+            <dd>840 欧元</dd>
             <dt>两孩 · 补贴合计</dt>
-            <dd>780 €</dd>
-            <dt>两孩 · 年底总额</dt>
-            <dd>1,140 €</dd>
+            <dd>780 欧元</dd>
+            <dt>两孩 · 年底总额（自付360欧元 +补贴780欧元）</dt>
+            <dd>1,140 欧元</dd>
             <dt>三孩 · 补贴合计</dt>
-            <dd>1,080 €</dd>
+            <dd>1,080 欧元</dd>
             <div className="total">
-              <span>三孩 · 年底总额</span>
-              <span>1,440 €</span>
+              <span>三孩 · 年底总额（自付360欧元 +补贴1,080欧元）</span>
+              <span>1,440 欧元</span>
             </div>
           </dl>
           <p style={{ margin: "0.8rem 0 0", fontSize: "0.9rem", color: "var(--muted)" }}>
