@@ -60,25 +60,25 @@ export default function Process() {
         </p>
 
         <div className="example">
-          <h3>算例：每月自付 25 欧元（年缴 300），父母符合直接资格</h3>
+          <h3>算例：每月自付 30 欧元（年缴 360），父母符合直接资格</h3>
           <dl>
             <dt>无孩 · 基本补助</dt>
-            <dd>150 €</dd>
+            <dd>180 €</dd>
             <dt>无孩 · 当年新增（自付+补助）</dt>
-            <dd>450 €</dd>
+            <dd>540 €</dd>
             <dt>一孩 · 国家补助合计</dt>
-            <dd>450 €</dd>
+            <dd>480 €</dd>
             <dt>一孩 · 当年新增</dt>
-            <dd>750 €</dd>
+            <dd>840 €</dd>
             <dt>两孩 · 国家补助合计</dt>
-            <dd>750 €</dd>
+            <dd>780 €</dd>
             <dt>两孩 · 当年新增</dt>
-            <dd>1,050 €</dd>
+            <dd>1,140 €</dd>
             <dt>三孩 · 国家补助合计</dt>
-            <dd>1,050 €</dd>
+            <dd>1,080 €</dd>
             <div className="total">
               <span>三孩 · 当年新增投入</span>
-              <span>1,350 €</span>
+              <span>1,440 €</span>
             </div>
           </dl>
           <p style={{ margin: "0.8rem 0 0", fontSize: "0.9rem", color: "var(--muted)" }}>
