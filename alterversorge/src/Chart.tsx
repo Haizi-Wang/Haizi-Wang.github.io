@@ -238,6 +238,9 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
 
       const canvasBox = canvas.getBoundingClientRect()
       const wrapBox = wrap.getBoundingClientRect()
+      // Ancestor CSS scale (rechner fit) shrinks getBoundingClientRect; x/y stay layout px.
+      const sx = canvasBox.width / (canvas.clientWidth || canvasBox.width || 1)
+      const sy = canvasBox.height / (canvas.clientHeight || canvasBox.height || 1)
       hitsRef.current = points.map((p, i) => {
         const x = xAt(i)
         const y = yAt(p.value)
@@ -245,8 +248,8 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           ...p,
           x,
           y,
-          viewX: canvasBox.left - wrapBox.left + x,
-          viewY: canvasBox.top - wrapBox.top + y,
+          viewX: canvasBox.left - wrapBox.left + x * sx,
+          viewY: canvasBox.top - wrapBox.top + y * sy,
         }
       })
     }
@@ -266,11 +269,18 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     }
   }, [points, activeIndex, lang, labels])
 
-  const onMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  /**
+   * Pointer events (mouse + touch + pen). Avoid touch-action:none / touch-none:
+   * that blocks Android pinch-zoom and parent pan/scroll on this role=img canvas.
+   */
+  const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current
     if (!canvas) return
     const box = canvas.getBoundingClientRect()
-    const x = e.clientX - box.left
+    // Map through ancestor CSS scale (e.g. /rechner fit) and browser zoom:
+    // getBoundingClientRect is visual; hit.x is in canvas layout CSS pixels.
+    const layoutW = canvas.clientWidth || box.width || 1
+    const x = ((e.clientX - box.left) * layoutW) / (box.width || layoutW)
     let best: Hit | null = null
     let dist = 18
     for (const hit of hitsRef.current) {
@@ -297,9 +307,9 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       >
         <canvas
           ref={canvasRef}
-          className="block touch-none"
-          onMouseMove={onMove}
-          onMouseLeave={() => setHover(null)}
+          className="block"
+          onPointerMove={onPointerMove}
+          onPointerLeave={() => setHover(null)}
           role="img"
           aria-label={labels.total}
         />
