@@ -177,3 +177,52 @@
   opacity: 0.55;
   animation: drift 18s ease-in-out infinite alternate;
 }
+
+/* Chart local zoom — Android pinch inside overflow:auto needs this, not page zoom. */
+.chart-zoom-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0 0 0.55rem;
+}
+
+.chart-zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--primary);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.chart-zoom-btn:hover:not(:disabled) {
+  background: rgba(42, 122, 140, 0.1);
+}
+
+.chart-zoom-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.chart-zoom-pct {
+  min-width: 3.5rem;
+}
+
+.chart-zoom-layer {
+  position: relative;
+  transform-origin: top left;
+}
+
+.chart-zoom-layer canvas {
+  transform-origin: top left;
+}
