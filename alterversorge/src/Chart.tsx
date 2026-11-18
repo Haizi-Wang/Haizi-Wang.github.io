@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Minus, Plus, RotateCcw } from 'lucide-react'
 import type { Point } from './calc'
 import { formatEuro } from './calc'
 import { chartLabels, type Lang } from './i18n'
@@ -9,6 +10,10 @@ const GAIN = '#1f6b52'
 const TOTAL = '#0b3d4a'
 
 const STEPS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
+const MIN_ZOOM = 1
+const MAX_ZOOM = 3
+const ZOOM_STEP = 0.35
+const BASE_H = 400
 
 function axisMax(peak: number) {
   const step = STEPS.find((s) => peak / s <= 8) ?? STEPS[STEPS.length - 1]
@@ -29,13 +34,30 @@ function formatAxis(n: number, lang: Lang) {
   return Math.round(n).toLocaleString(locale)
 }
 
+function clampZoom(z: number) {
+  return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z))
+}
+
+function touchDist(a: Touch, b: Touch) {
+  return Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY)
+}
+
+function touchMid(a: Touch, b: Touch) {
+  return { x: (a.clientX + b.clientX) / 2, y: (a.clientY + b.clientY) / 2 }
+}
+
 type Hit = Point & { x: number; y: number; viewX: number; viewY: number }
 
 export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const layerRef = useRef<HTMLDivElement>(null)
   const hitsRef = useRef<Hit[]>([])
+  const baseSizeRef = useRef({ w: 0, h: BASE_H })
+  const zoomRef = useRef(1)
+  const pinchRef = useRef<{ startDist: number; startZoom: number } | null>(null)
+  const [zoom, setZoom] = useState(1)
   const [hover, setHover] = useState<Hit | null>(null)
   const labels = chartLabels[lang]
 
@@ -51,11 +73,48 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     return i >= 0 ? i : Math.max(points.length - 1, 0)
   })()
 
+  const applyZoom = (next: number, focalClient?: { x: number; y: number }) => {
+    const scroll = scrollRef.current
+    const layer = layerRef.current
+    const canvas = canvasRef.current
+    if (!scroll || !layer || !canvas) return
+
+    const prev = zoomRef.current
+    const z = clampZoom(next)
+    if (Math.abs(z - prev) < 0.001 && z === prev) return
+
+    const { w: baseW, h: baseH } = baseSizeRef.current
+    if (baseW <= 0) return
+
+    const rect = scroll.getBoundingClientRect()
+    const focalX = focalClient
+      ? focalClient.x - rect.left + scroll.scrollLeft
+      : scroll.scrollLeft + scroll.clientWidth / 2
+    const focalY = focalClient
+      ? focalClient.y - rect.top + scroll.scrollTop
+      : scroll.scrollTop + scroll.clientHeight / 2
+    const contentX = focalX / prev
+    const contentY = focalY / prev
+
+    zoomRef.current = z
+    layer.style.width = `${baseW * z}px`
+    layer.style.height = `${baseH * z}px`
+    canvas.style.transform = `scale(${z})`
+    canvas.style.transformOrigin = 'top left'
+
+    const viewX = focalClient ? focalClient.x - rect.left : scroll.clientWidth / 2
+    const viewY = focalClient ? focalClient.y - rect.top : scroll.clientHeight / 2
+    scroll.scrollLeft = contentX * z - viewX
+    scroll.scrollTop = contentY * z - viewY
+    setZoom(z)
+  }
+
   useEffect(() => {
     const canvas = canvasRef.current
     const wrap = wrapRef.current
     const scroll = scrollRef.current
-    if (!canvas || !wrap || !scroll) return
+    const layer = layerRef.current
+    if (!canvas || !wrap || !scroll || !layer) return
 
     const draw = () => {
       const ctx = canvas.getContext('2d')
@@ -65,11 +124,17 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       const width = Math.max(scroll.clientWidth, 78 + Math.max(points.length - 1, 1) * 22)
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = Math.round(width * dpr)
-      canvas.height = Math.round(400 * dpr)
+      canvas.height = Math.round(BASE_H * dpr)
       canvas.style.width = `${width}px`
-      canvas.style.height = '400px'
+      canvas.style.height = `${BASE_H}px`
+      const z = zoomRef.current
+      canvas.style.transform = `scale(${z})`
+      canvas.style.transformOrigin = 'top left'
+      baseSizeRef.current = { w: width, h: BASE_H }
+      layer.style.width = `${width * z}px`
+      layer.style.height = `${BASE_H * z}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      ctx.clearRect(0, 0, width, 400)
+      ctx.clearRect(0, 0, width, BASE_H)
       ctx.lineJoin = 'round'
       ctx.lineCap = 'round'
 
@@ -238,7 +303,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
 
       const canvasBox = canvas.getBoundingClientRect()
       const wrapBox = wrap.getBoundingClientRect()
-      // Ancestor CSS scale (rechner fit) shrinks getBoundingClientRect; x/y stay layout px.
+      // Ancestor CSS scale + chart zoom both shrink getBoundingClientRect.
       const sx = canvasBox.width / (canvas.clientWidth || canvasBox.width || 1)
       const sy = canvasBox.height / (canvas.clientHeight || canvasBox.height || 1)
       hitsRef.current = points.map((p, i) => {
@@ -270,15 +335,55 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
   }, [points, activeIndex, lang, labels])
 
   /**
-   * Pointer events (mouse + touch + pen). Avoid touch-action:none / touch-none:
-   * that blocks Android pinch-zoom and parent pan/scroll on this role=img canvas.
+   * Custom chart pinch: Android Chrome does not reliably page-zoom when the
+   * gesture starts inside an overflow:auto region (.chart-scroll). We claim
+   * two-finger moves (non-passive) and scale the canvas locally instead.
    */
+  useEffect(() => {
+    const scroll = scrollRef.current
+    if (!scroll) return
+
+    const onStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        pinchRef.current = {
+          startDist: touchDist(e.touches[0], e.touches[1]),
+          startZoom: zoomRef.current,
+        }
+      }
+    }
+
+    const onMove = (e: TouchEvent) => {
+      if (e.touches.length !== 2 || !pinchRef.current) return
+      if (pinchRef.current.startDist < 8) return
+      e.preventDefault()
+      const dist = touchDist(e.touches[0], e.touches[1])
+      const mid = touchMid(e.touches[0], e.touches[1])
+      applyZoom(pinchRef.current.startZoom * (dist / pinchRef.current.startDist), mid)
+    }
+
+    const onEnd = (e: TouchEvent) => {
+      if (e.touches.length < 2) pinchRef.current = null
+    }
+
+    scroll.addEventListener('touchstart', onStart, { passive: true })
+    scroll.addEventListener('touchmove', onMove, { passive: false })
+    scroll.addEventListener('touchend', onEnd, { passive: true })
+    scroll.addEventListener('touchcancel', onEnd, { passive: true })
+    return () => {
+      scroll.removeEventListener('touchstart', onStart)
+      scroll.removeEventListener('touchmove', onMove)
+      scroll.removeEventListener('touchend', onEnd)
+      scroll.removeEventListener('touchcancel', onEnd)
+    }
+    // applyZoom closes over refs; rebind only when mount/scroll node changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (pinchRef.current) return
     const canvas = canvasRef.current
     if (!canvas) return
     const box = canvas.getBoundingClientRect()
-    // Map through ancestor CSS scale (e.g. /rechner fit) and browser zoom:
-    // getBoundingClientRect is visual; hit.x is in canvas layout CSS pixels.
     const layoutW = canvas.clientWidth || box.width || 1
     const x = ((e.clientX - box.left) * layoutW) / (box.width || layoutW)
     let best: Hit | null = null
@@ -293,26 +398,78 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     setHover(best)
   }
 
+  const onWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!e.ctrlKey && !e.metaKey) return
+    e.preventDefault()
+    const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08
+    applyZoom(zoomRef.current * factor, { x: e.clientX, y: e.clientY })
+  }
+
   const summary =
     hover ??
     (retire
       ? { ...retire, x: 0, y: 0, viewX: 0, viewY: 0 }
       : null)
 
+  const zoomPct = Math.round(zoom * 100)
+
   return (
     <div ref={wrapRef} className="relative">
+      <div className="chart-zoom-bar" role="toolbar" aria-label={labels.zoomIn}>
+        <button
+          type="button"
+          className="chart-zoom-btn"
+          aria-label={labels.zoomOut}
+          disabled={zoom <= MIN_ZOOM + 0.001}
+          onClick={() => applyZoom(zoomRef.current - ZOOM_STEP)}
+        >
+          <Minus className="size-4" aria-hidden="true" />
+        </button>
+        <button
+          type="button"
+          className="chart-zoom-btn chart-zoom-pct"
+          aria-label={labels.zoomReset}
+          onClick={() => applyZoom(1)}
+          title={labels.zoomReset}
+        >
+          {zoomPct}%
+        </button>
+        <button
+          type="button"
+          className="chart-zoom-btn"
+          aria-label={labels.zoomIn}
+          disabled={zoom >= MAX_ZOOM - 0.001}
+          onClick={() => applyZoom(zoomRef.current + ZOOM_STEP)}
+        >
+          <Plus className="size-4" aria-hidden="true" />
+        </button>
+        {zoom > MIN_ZOOM + 0.001 && (
+          <button
+            type="button"
+            className="chart-zoom-btn"
+            aria-label={labels.zoomReset}
+            onClick={() => applyZoom(1)}
+          >
+            <RotateCcw className="size-4" aria-hidden="true" />
+          </button>
+        )}
+      </div>
+
       <div
         ref={scrollRef}
         className="chart-scroll max-h-[28rem] overflow-auto rounded-2xl border border-[color:var(--line)] bg-[color:var(--plot)]"
+        onWheel={onWheel}
       >
-        <canvas
-          ref={canvasRef}
-          className="block"
-          onPointerMove={onPointerMove}
-          onPointerLeave={() => setHover(null)}
-          role="img"
-          aria-label={labels.total}
-        />
+        <div ref={layerRef} className="chart-zoom-layer">
+          <canvas
+            ref={canvasRef}
+            className="block"
+            onPointerMove={onPointerMove}
+            onPointerLeave={() => setHover(null)}
+            role="img"
+            aria-label={labels.total}
+          />
+        </div>
       </div>
 
       {hover && (

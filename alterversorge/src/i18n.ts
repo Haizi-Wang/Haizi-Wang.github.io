@@ -53,6 +53,9 @@ export const chartLabels = {
     gainShort: '增值',
     withdrawn: '当年提取',
     ownShort: '自付',
+    zoomIn: '放大图表',
+    zoomOut: '缩小图表',
+    zoomReset: '重置缩放',
   },
   zhHant: {
     unit: '萬',
@@ -70,6 +73,9 @@ export const chartLabels = {
     gainShort: '增值',
     withdrawn: '當年提取',
     ownShort: '自付',
+    zoomIn: '放大圖表',
+    zoomOut: '縮小圖表',
+    zoomReset: '重置縮放',
   },
   en: {
     unit: 'k',
@@ -87,6 +93,9 @@ export const chartLabels = {
     gainShort: 'growth',
     withdrawn: 'Withdrawn',
     ownShort: 'own',
+    zoomIn: 'Zoom in chart',
+    zoomOut: 'Zoom out chart',
+    zoomReset: 'Reset zoom',
   },
   de: {
     unit: 'Tsd.',
@@ -104,6 +113,9 @@ export const chartLabels = {
     gainShort: 'Zuwachs',
     withdrawn: 'Entnahme im Jahr',
     ownShort: 'eigen',
+    zoomIn: 'Diagramm vergrößern',
+    zoomOut: 'Diagramm verkleinern',
+    zoomReset: 'Zoom zurücksetzen',
   },
 } as const
 
