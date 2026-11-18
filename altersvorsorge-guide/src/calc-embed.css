@@ -180,6 +180,8 @@
 
 /* Chart local zoom — Android pinch inside overflow:auto needs this, not page zoom. */
 .chart-zoom-bar {
+  position: relative;
+  z-index: 5;
   display: flex;
   align-items: center;
   gap: 0.35rem;
@@ -195,7 +197,7 @@
   padding: 0 0.55rem;
   border: 1px solid var(--line);
   border-radius: 0.75rem;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--primary);
   cursor: pointer;
   font: inherit;
@@ -203,13 +205,19 @@
   font-variant-numeric: tabular-nums;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
+  user-select: none;
 }
 
-.chart-zoom-btn:hover:not(:disabled) {
+.chart-zoom-btn svg {
+  pointer-events: none;
+}
+
+.chart-zoom-btn:hover:not(.is-disabled) {
   background: rgba(42, 122, 140, 0.1);
 }
 
-.chart-zoom-btn:disabled {
+.chart-zoom-btn.is-disabled,
+.chart-zoom-btn[aria-disabled="true"] {
   opacity: 0.4;
   cursor: default;
 }
