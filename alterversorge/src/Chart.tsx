@@ -13,15 +13,15 @@ const STEPS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
 const ZOOM_STEP = 0.35
-/** Default canvas height: 0.6× the prior 720px default (~432). */
-const BASE_H = 432
-const PLOT_LEFT = 58
-const PLOT_RIGHT = 20
-const PLOT_TOP = 32
-const PLOT_BOTTOM = 72
+/** Default canvas height: 0.4× the PR #17 720px default (~288). */
+const BASE_H = 288
+const PLOT_LEFT = 52
+const PLOT_RIGHT = 16
+const PLOT_TOP = 24
+const PLOT_BOTTOM = 56
 const PLOT_H = BASE_H - PLOT_TOP - PLOT_BOTTOM
 const AXIS_Y = PLOT_TOP + PLOT_H
-const YEAR_LABEL_Y = AXIS_Y + 12
+const YEAR_LABEL_Y = AXIS_Y + 10
 /** Viewport shows the full chart at 100% zoom; pan only when user zooms in. */
 const SCROLL_MAX_H = BASE_H + 24
 
@@ -176,7 +176,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
       ctx.fillRect(PLOT_LEFT, PLOT_TOP, plotW, PLOT_H)
 
-      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
@@ -289,14 +289,14 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillText(tag, x, 14)
-        ctx.font = `600 18px 'Fraunces', 'Noto Serif SC', serif`
+        ctx.font = `600 15px 'Fraunces', 'Noto Serif SC', serif`
         const phaseLabel = (text: string, from: number, to: number) => {
-          if (to - from < 72) return
+          if (to - from < 64) return
           const mid = (from + to) / 2
           const w = ctx.measureText(text).width
           ctx.fillStyle = 'rgba(244, 250, 248, 0.92)'
           ctx.beginPath()
-          ctx.roundRect(mid - w / 2 - 12, PLOT_TOP + 4, w + 24, 28, 12)
+          ctx.roundRect(mid - w / 2 - 10, PLOT_TOP + 2, w + 20, 22, 10)
           ctx.fill()
           ctx.strokeStyle = 'rgba(11, 61, 74, 0.2)'
           ctx.lineWidth = 1
@@ -304,7 +304,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           ctx.fillStyle = '#0b3d4a'
           ctx.textAlign = 'center'
           ctx.textBaseline = 'middle'
-          ctx.fillText(text, mid, PLOT_TOP + 18)
+          ctx.fillText(text, mid, PLOT_TOP + 13)
         }
         phaseLabel(labels.save, PLOT_LEFT, x)
         phaseLabel(labels.draw, x, PLOT_LEFT + plotW)
