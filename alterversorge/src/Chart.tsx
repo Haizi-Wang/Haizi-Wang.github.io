@@ -13,7 +13,17 @@ const STEPS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
 const ZOOM_STEP = 0.35
-const BASE_H = 400
+/** Default canvas height (~2× the old 400px) so charts read without zoom. */
+const BASE_H = 720
+const PLOT_LEFT = 58
+const PLOT_RIGHT = 20
+const PLOT_TOP = 52
+const PLOT_BOTTOM = 108
+const PLOT_H = BASE_H - PLOT_TOP - PLOT_BOTTOM
+const AXIS_Y = PLOT_TOP + PLOT_H
+const YEAR_LABEL_Y = AXIS_Y + 14
+/** Viewport shows the full chart at 100% zoom; pan only when user zooms in. */
+const SCROLL_MAX_H = BASE_H + 24
 
 function axisMax(peak: number) {
   const step = STEPS.find((s) => peak / s <= 8) ?? STEPS[STEPS.length - 1]
@@ -139,7 +149,8 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       if (!ctx || points.length === 0) return
       const { max, step } = axisMax(Math.max(...points.map((p) => p.value), 1))
       const ticks = Math.round(max / step)
-      const width = Math.max(scroll.clientWidth, 78 + Math.max(points.length - 1, 1) * 22)
+      // Fit width to the visible scrollport at 100% zoom (no forced wide min).
+      const width = Math.max(Math.floor(scroll.clientWidth), 280)
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(BASE_H * dpr)
@@ -156,16 +167,16 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.lineJoin = 'round'
       ctx.lineCap = 'round'
 
-      const plotW = width - 58 - 20
+      const plotW = Math.max(width - PLOT_LEFT - PLOT_RIGHT, 1)
       const last = points.length - 1
-      const xAt = (i: number) => 58 + (last === 0 ? 0 : (i / last) * plotW)
-      const yAt = (v: number) => 342 - (v / max) * 314
+      const xAt = (i: number) => PLOT_LEFT + (last === 0 ? 0 : (i / last) * plotW)
+      const yAt = (v: number) => AXIS_Y - (v / max) * PLOT_H
       const retireIdx = points.findIndex((p) => p.age === 67 && p.phase === 'save')
 
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
-      ctx.fillRect(58, 28, plotW, 314)
+      ctx.fillRect(PLOT_LEFT, PLOT_TOP, plotW, PLOT_H)
 
-      ctx.font = `11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `13px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
@@ -174,19 +185,19 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.beginPath()
         ctx.strokeStyle = i === 0 ? 'rgba(11, 61, 74, 0.28)' : 'rgba(11, 61, 74, 0.08)'
         ctx.lineWidth = 1
-        ctx.moveTo(58, y)
-        ctx.lineTo(58 + plotW, y)
+        ctx.moveTo(PLOT_LEFT, y)
+        ctx.lineTo(PLOT_LEFT + plotW, y)
         ctx.stroke()
         ctx.fillStyle = '#5a6f74'
-        ctx.fillText(formatAxis(v, lang), 50, y)
+        ctx.fillText(formatAxis(v, lang), PLOT_LEFT - 8, y)
       }
 
       ctx.beginPath()
       ctx.strokeStyle = 'rgba(11, 61, 74, 0.18)'
       ctx.lineWidth = 1
-      ctx.moveTo(58, 28)
-      ctx.lineTo(58, 342)
-      ctx.lineTo(58 + plotW, 342)
+      ctx.moveTo(PLOT_LEFT, PLOT_TOP)
+      ctx.lineTo(PLOT_LEFT, AXIS_Y)
+      ctx.lineTo(PLOT_LEFT + plotW, AXIS_Y)
       ctx.stroke()
 
       const fillBand = (
@@ -226,9 +237,9 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.stroke()
       }
 
-      strokeLine((p) => p.own, OWN, 1.25)
-      strokeLine((p) => p.own + p.subsidy, SUBSIDY, 1.25)
-      strokeLine((p) => p.value, TOTAL, 2.25)
+      strokeLine((p) => p.own, OWN, 1.6)
+      strokeLine((p) => p.own + p.subsidy, SUBSIDY, 1.6)
+      strokeLine((p) => p.value, TOTAL, 2.75)
 
       if (activeIndex >= 0 && activeIndex <= last) {
         const x = xAt(activeIndex)
@@ -237,18 +248,18 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.strokeStyle = 'rgba(11, 61, 74, 0.28)'
         ctx.lineWidth = 1
         ctx.setLineDash([2, 3])
-        ctx.moveTo(x, 28)
-        ctx.lineTo(x, 342)
+        ctx.moveTo(x, PLOT_TOP)
+        ctx.lineTo(x, AXIS_Y)
         ctx.stroke()
         ctx.setLineDash([])
         const dot = (y: number, color: string) => {
           ctx.beginPath()
           ctx.fillStyle = '#f4faf8'
-          ctx.arc(x, y, 5.5, 0, Math.PI * 2)
+          ctx.arc(x, y, 6.5, 0, Math.PI * 2)
           ctx.fill()
           ctx.beginPath()
           ctx.fillStyle = color
-          ctx.arc(x, y, 3.4, 0, Math.PI * 2)
+          ctx.arc(x, y, 4, 0, Math.PI * 2)
           ctx.fill()
         }
         dot(yAt(p.own), OWN)
@@ -262,30 +273,30 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.strokeStyle = 'rgba(11, 61, 74, 0.35)'
         ctx.setLineDash([1, 3])
         ctx.lineWidth = 1
-        ctx.moveTo(x, 28)
-        ctx.lineTo(x, 342)
+        ctx.moveTo(x, PLOT_TOP)
+        ctx.lineTo(x, AXIS_Y)
         ctx.stroke()
         ctx.setLineDash([])
         const tag = labels.age67
-        ctx.font = `600 11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+        ctx.font = `600 13px 'Source Sans 3', 'Noto Sans SC', sans-serif`
         const tw = ctx.measureText(tag).width
-        const left = x - tw / 2 - 6
+        const left = x - tw / 2 - 8
         ctx.fillStyle = '#0b3d4a'
         ctx.beginPath()
-        ctx.roundRect(left, 6, tw + 12, 16, 8)
+        ctx.roundRect(left, 10, tw + 16, 20, 10)
         ctx.fill()
         ctx.fillStyle = '#f4faf8'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(tag, x, 14)
-        ctx.font = `600 18px 'Fraunces', 'Noto Serif SC', serif`
+        ctx.fillText(tag, x, 20)
+        ctx.font = `600 22px 'Fraunces', 'Noto Serif SC', serif`
         const phaseLabel = (text: string, from: number, to: number) => {
-          if (to - from < 72) return
+          if (to - from < 96) return
           const mid = (from + to) / 2
           const w = ctx.measureText(text).width
           ctx.fillStyle = 'rgba(244, 250, 248, 0.92)'
           ctx.beginPath()
-          ctx.roundRect(mid - w / 2 - 12, 33, w + 24, 30, 12)
+          ctx.roundRect(mid - w / 2 - 14, PLOT_TOP + 8, w + 28, 36, 14)
           ctx.fill()
           ctx.strokeStyle = 'rgba(11, 61, 74, 0.2)'
           ctx.lineWidth = 1
@@ -293,24 +304,28 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           ctx.fillStyle = '#0b3d4a'
           ctx.textAlign = 'center'
           ctx.textBaseline = 'middle'
-          ctx.fillText(text, mid, 48)
+          ctx.fillText(text, mid, PLOT_TOP + 26)
         }
-        phaseLabel(labels.save, 58, x)
-        phaseLabel(labels.draw, x, 58 + plotW)
+        phaseLabel(labels.save, PLOT_LEFT, x)
+        phaseLabel(labels.draw, x, PLOT_LEFT + plotW)
       }
 
-      ctx.font = `10px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.fillStyle = '#5a6f74'
+      // Avoid unreadable year-label pile-up when many points share one viewport width.
+      const yearStep = Math.max(1, Math.ceil(last / Math.max(Math.floor(plotW / 28), 8)))
       for (let i = 0; i <= last; i++) {
         const x = xAt(i)
+        const major = i === retireIdx || i === 0 || i === last || i % yearStep === 0
         ctx.beginPath()
         ctx.strokeStyle = i === retireIdx ? '#0b3d4a' : 'rgba(11, 61, 74, 0.18)'
         ctx.lineWidth = 1
-        ctx.moveTo(x, 342)
-        ctx.lineTo(x, 342 + (i === retireIdx ? 7 : 4))
+        ctx.moveTo(x, AXIS_Y)
+        ctx.lineTo(x, AXIS_Y + (i === retireIdx ? 9 : 5))
         ctx.stroke()
+        if (!major) continue
         ctx.save()
-        ctx.translate(x, 352)
+        ctx.translate(x, YEAR_LABEL_Y)
         ctx.rotate(-Math.PI / 2)
         ctx.textAlign = 'right'
         ctx.textBaseline = 'middle'
@@ -551,7 +566,8 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
 
       <div
         ref={scrollRef}
-        className="chart-scroll max-h-[28rem] overflow-auto rounded-2xl border border-[color:var(--line)] bg-[color:var(--plot)]"
+        className="chart-scroll overflow-auto rounded-2xl border border-[color:var(--line)] bg-[color:var(--plot)]"
+        style={{ maxHeight: SCROLL_MAX_H }}
         onWheel={onWheel}
       >
         <div ref={layerRef} className="chart-zoom-layer">

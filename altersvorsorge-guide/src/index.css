@@ -288,9 +288,12 @@ a:hover {
   padding-bottom: 0.75rem !important;
 }
 
-/* Shorter charts + scrollable notes so embed height can fit the viewport. */
+/*
+ * Charts default ~2× taller than the old 14rem clip so the full plot is visible
+ * at 100% zoom; Chart.tsx also sets maxHeight to BASE_H+24 (~744px).
+ */
 .rechner-page .chart-scroll {
-  max-height: 14rem;
+  max-height: 46.5rem;
 }
 
 .rechner-page .shell > .grid > section.panel > .mt-6.border-t {
