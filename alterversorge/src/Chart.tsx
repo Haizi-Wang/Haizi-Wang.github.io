@@ -9,7 +9,6 @@ const SUBSIDY = '#c47a2c'
 const GAIN = '#1f6b52'
 const TOTAL = '#0b3d4a'
 
-const STEPS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
 const ZOOM_STEP = 0.35
@@ -24,23 +23,64 @@ const AXIS_Y = PLOT_TOP + PLOT_H
 const YEAR_LABEL_Y = AXIS_Y + 10
 /** Viewport shows the full chart at 100% zoom; pan only when user zooms in. */
 const SCROLL_MAX_H = BASE_H + 24
+/** Headroom above the data peak so markers/strokes don't clip. */
+const Y_HEADROOM = 1.1
+const Y_TICK_TARGET = 5
 
-function axisMax(peak: number) {
-  const step = STEPS.find((s) => peak / s <= 8) ?? STEPS[STEPS.length - 1]
-  return { max: (Math.ceil(Math.max(peak, 1) / step) + 1) * step, step }
+/** Nice 1/2/5×10^n step for an auto Y domain. */
+function niceNum(range: number, round: boolean) {
+  const r = Math.max(range, Number.EPSILON)
+  const exp = Math.floor(Math.log10(r))
+  const f = r / 10 ** exp
+  let nf: number
+  if (round) {
+    if (f < 1.5) nf = 1
+    else if (f < 3) nf = 2
+    else if (f < 7) nf = 5
+    else nf = 10
+  } else if (f <= 1) nf = 1
+  else if (f <= 2) nf = 2
+  else if (f <= 5) nf = 5
+  else nf = 10
+  return nf * 10 ** exp
 }
 
-function formatAxis(n: number, lang: Lang) {
+/**
+ * Y domain from the series peak (not a fixed 万-step table).
+ * Small peaks get a tight scale; large peaks grow without a 1e6 ceiling.
+ */
+function axisMax(peak: number) {
+  const p = Math.max(peak, 1)
+  const target = p * Y_HEADROOM
+  const step = niceNum(target / Y_TICK_TARGET, true)
+  const max = Math.max(Math.ceil(target / step) * step, step)
+  return { max, step }
+}
+
+function formatAxis(n: number, lang: Lang, step: number) {
   if (n === 0) return '0'
-  if (n % 1e4 === 0) {
-    const units = n / 1e4
-    if (lang === 'zh' || lang === 'zhHant') {
-      return `${units.toLocaleString('zh-CN')}${chartLabels[lang].unit}`
-    }
-    if (lang === 'de') return `${(units * 10).toLocaleString('de-DE')} Tsd.`
-    return `${units * 10}k`
-  }
   const locale = lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-GB' : 'zh-CN'
+
+  // Prefer compact 万 / Tsd. / k when the tick scale is at least 一千.
+  if (step >= 1e3) {
+    if (lang === 'zh' || lang === 'zhHant') {
+      const units = n / 1e4
+      const label =
+        step >= 1e4 || Number.isInteger(units)
+          ? units
+          : Math.round(units * 10) / 10
+      return `${label.toLocaleString('zh-CN')}${chartLabels[lang].unit}`
+    }
+    if (lang === 'de') {
+      const tsd = n / 1e3
+      const label = step >= 1e4 || Number.isInteger(tsd) ? tsd : Math.round(tsd * 10) / 10
+      return `${label.toLocaleString('de-DE')} Tsd.`
+    }
+    const k = n / 1e3
+    const label = step >= 1e4 || Number.isInteger(k) ? k : Math.round(k * 10) / 10
+    return `${label.toLocaleString('en-GB')}k`
+  }
+
   return Math.round(n).toLocaleString(locale)
 }
 
@@ -147,8 +187,12 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     const draw = () => {
       const ctx = canvas.getContext('2d')
       if (!ctx || points.length === 0) return
-      const { max, step } = axisMax(Math.max(...points.map((p) => p.value), 1))
-      const ticks = Math.round(max / step)
+      const peak = Math.max(
+        1,
+        ...points.map((p) => Math.max(p.value, p.own + p.subsidy, p.own, 0)),
+      )
+      const { max, step } = axisMax(peak)
+      const ticks = Math.max(1, Math.round(max / step))
       // Fit width to the visible scrollport at 100% zoom (no forced wide min).
       const width = Math.max(Math.floor(scroll.clientWidth), 280)
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -170,7 +214,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       const plotW = Math.max(width - PLOT_LEFT - PLOT_RIGHT, 1)
       const last = points.length - 1
       const xAt = (i: number) => PLOT_LEFT + (last === 0 ? 0 : (i / last) * plotW)
-      const yAt = (v: number) => AXIS_Y - (v / max) * PLOT_H
+      const yAt = (v: number) => AXIS_Y - (Math.min(Math.max(v, 0), max) / max) * PLOT_H
       const retireIdx = points.findIndex((p) => p.age === 67 && p.phase === 'save')
 
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
@@ -181,6 +225,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
         const v = i * step
+        if (v > max + step * 0.01) break
         const y = yAt(v)
         ctx.beginPath()
         ctx.strokeStyle = i === 0 ? 'rgba(11, 61, 74, 0.28)' : 'rgba(11, 61, 74, 0.08)'
@@ -189,7 +234,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.lineTo(PLOT_LEFT + plotW, y)
         ctx.stroke()
         ctx.fillStyle = '#5a6f74'
-        ctx.fillText(formatAxis(v, lang), PLOT_LEFT - 8, y)
+        ctx.fillText(formatAxis(v, lang, step), PLOT_LEFT - 8, y)
       }
 
       ctx.beginPath()
