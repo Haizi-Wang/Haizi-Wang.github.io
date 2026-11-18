@@ -79,12 +79,22 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     const canvas = canvasRef.current
     if (!scroll || !layer || !canvas) return
 
-    const prev = zoomRef.current
-    const z = clampZoom(next)
-    if (Math.abs(z - prev) < 0.001 && z === prev) return
+    const prev = zoomRef.current || 1
+    const z = clampZoom(Number.isFinite(next) ? next : prev)
+    // Always sync React state so +/− disabled UI cannot drift from the canvas.
+    if (Math.abs(z - prev) < 0.0005) {
+      zoomRef.current = z
+      setZoom(z)
+      return
+    }
 
     const { w: baseW, h: baseH } = baseSizeRef.current
-    if (baseW <= 0) return
+    if (baseW <= 0) {
+      // Layout not ready — still record intent so a later draw picks it up.
+      zoomRef.current = z
+      setZoom(z)
+      return
+    }
 
     const rect = scroll.getBoundingClientRect()
     const focalX = focalClient
@@ -97,6 +107,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     const contentY = focalY / prev
 
     zoomRef.current = z
+    setZoom(z)
     layer.style.width = `${baseW * z}px`
     layer.style.height = `${baseH * z}px`
     canvas.style.transform = `scale(${z})`
@@ -104,9 +115,16 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
 
     const viewX = focalClient ? focalClient.x - rect.left : scroll.clientWidth / 2
     const viewY = focalClient ? focalClient.y - rect.top : scroll.clientHeight / 2
-    scroll.scrollLeft = contentX * z - viewX
-    scroll.scrollTop = contentY * z - viewY
-    setZoom(z)
+    // Assign scroll after layer resize; avoid scroll→full redraw races (see effect).
+    scroll.scrollLeft = Math.max(0, contentX * z - viewX)
+    scroll.scrollTop = Math.max(0, contentY * z - viewY)
+  }
+
+  const applyZoomRef = useRef(applyZoom)
+  applyZoomRef.current = applyZoom
+
+  const nudgeZoom = (delta: number) => {
+    applyZoomRef.current(zoomRef.current + delta)
   }
 
   useEffect(() => {
@@ -301,28 +319,44 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.restore()
       }
 
-      const canvasBox = canvas.getBoundingClientRect()
-      const wrapBox = wrap.getBoundingClientRect()
-      // Ancestor CSS scale + chart zoom both shrink getBoundingClientRect.
-      const sx = canvasBox.width / (canvas.clientWidth || canvasBox.width || 1)
-      const sy = canvasBox.height / (canvas.clientHeight || canvasBox.height || 1)
-      hitsRef.current = points.map((p, i) => {
-        const x = xAt(i)
-        const y = yAt(p.value)
-        return {
-          ...p,
-          x,
-          y,
-          viewX: canvasBox.left - wrapBox.left + x * sx,
-          viewY: canvasBox.top - wrapBox.top + y * sy,
-        }
-      })
+      const refreshHits = () => {
+        const canvasBox = canvas.getBoundingClientRect()
+        const wrapBox = wrap.getBoundingClientRect()
+        // Ancestor CSS scale + chart zoom both shrink getBoundingClientRect.
+        const sx = canvasBox.width / (canvas.clientWidth || canvasBox.width || 1)
+        const sy = canvasBox.height / (canvas.clientHeight || canvasBox.height || 1)
+        hitsRef.current = points.map((p, i) => {
+          const x = xAt(i)
+          const y = yAt(p.value)
+          return {
+            ...p,
+            x,
+            y,
+            viewX: canvasBox.left - wrapBox.left + x * sx,
+            viewY: canvasBox.top - wrapBox.top + y * sy,
+          }
+        })
+      }
+      refreshHits()
     }
 
     draw()
     const ro = new ResizeObserver(draw)
     ro.observe(scroll)
-    scroll.addEventListener('scroll', draw)
+    // Scroll only refreshes hit targets — full redraw here raced zoom-out on Android
+    // (scrollLeft clamp during layer shrink re-entered draw mid-gesture).
+    const onScroll = () => {
+      const canvasBox = canvas.getBoundingClientRect()
+      const wrapBox = wrap.getBoundingClientRect()
+      const sx = canvasBox.width / (canvas.clientWidth || canvasBox.width || 1)
+      const sy = canvasBox.height / (canvas.clientHeight || canvasBox.height || 1)
+      hitsRef.current = hitsRef.current.map((hit) => ({
+        ...hit,
+        viewX: canvasBox.left - wrapBox.left + hit.x * sx,
+        viewY: canvasBox.top - wrapBox.top + hit.y * sy,
+      }))
+    }
+    scroll.addEventListener('scroll', onScroll, { passive: true })
     let alive = true
     document.fonts?.ready.then(() => {
       if (alive) draw()
@@ -330,7 +364,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     return () => {
       alive = false
       ro.disconnect()
-      scroll.removeEventListener('scroll', draw)
+      scroll.removeEventListener('scroll', onScroll)
     }
   }, [points, activeIndex, lang, labels])
 
@@ -338,6 +372,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
    * Custom chart pinch: Android Chrome does not reliably page-zoom when the
    * gesture starts inside an overflow:auto region (.chart-scroll). We claim
    * two-finger moves (non-passive) and scale the canvas locally instead.
+   * Pinch-out (fingers closer) must decrease zoom the same way pinch-in increases it.
    */
   useEffect(() => {
     const scroll = scrollRef.current
@@ -346,7 +381,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     const onStart = (e: TouchEvent) => {
       if (e.touches.length === 2) {
         pinchRef.current = {
-          startDist: touchDist(e.touches[0], e.touches[1]),
+          startDist: Math.max(touchDist(e.touches[0], e.touches[1]), 1),
           startZoom: zoomRef.current,
         }
       }
@@ -358,7 +393,10 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       e.preventDefault()
       const dist = touchDist(e.touches[0], e.touches[1])
       const mid = touchMid(e.touches[0], e.touches[1])
-      applyZoom(pinchRef.current.startZoom * (dist / pinchRef.current.startDist), mid)
+      applyZoomRef.current(
+        pinchRef.current.startZoom * (dist / pinchRef.current.startDist),
+        mid,
+      )
     }
 
     const onEnd = (e: TouchEvent) => {
@@ -375,8 +413,6 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       scroll.removeEventListener('touchend', onEnd)
       scroll.removeEventListener('touchcancel', onEnd)
     }
-    // applyZoom closes over refs; rebind only when mount/scroll node changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -402,7 +438,30 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
     if (!e.ctrlKey && !e.metaKey) return
     e.preventDefault()
     const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08
-    applyZoom(zoomRef.current * factor, { x: e.clientX, y: e.clientY })
+    applyZoomRef.current(zoomRef.current * factor, { x: e.clientX, y: e.clientY })
+  }
+
+  const lastNudgeAt = useRef(0)
+  const onZoomPointer = (delta: number) => (e: React.PointerEvent<HTMLButtonElement>) => {
+    // Prefer pointerup over click: Android + SVG icons inside <button> can drop clicks.
+    if (e.pointerType === 'mouse' && e.button !== 0) return
+    const now = performance.now()
+    // Ignore compatibility mouse ghost after a touch nudge.
+    if (e.pointerType === 'mouse' && now - lastNudgeAt.current < 450) return
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') lastNudgeAt.current = now
+    e.preventDefault()
+    e.stopPropagation()
+    nudgeZoom(delta)
+  }
+
+  const onZoomResetPointer = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return
+    const now = performance.now()
+    if (e.pointerType === 'mouse' && now - lastNudgeAt.current < 450) return
+    if (e.pointerType === 'touch' || e.pointerType === 'pen') lastNudgeAt.current = now
+    e.preventDefault()
+    e.stopPropagation()
+    applyZoomRef.current(1)
   }
 
   const summary =
@@ -412,16 +471,30 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       : null)
 
   const zoomPct = Math.round(zoom * 100)
+  const atMinZoom = zoom <= MIN_ZOOM + 0.001
+  const atMaxZoom = zoom >= MAX_ZOOM - 0.001
 
   return (
     <div ref={wrapRef} className="relative">
-      <div className="chart-zoom-bar" role="toolbar" aria-label={labels.zoomIn}>
+      <div
+        className="chart-zoom-bar"
+        role="toolbar"
+        aria-label={labels.zoomIn}
+        data-zoom={zoomPct}
+      >
         <button
           type="button"
-          className="chart-zoom-btn"
+          className={`chart-zoom-btn${atMinZoom ? ' is-disabled' : ''}`}
           aria-label={labels.zoomOut}
-          disabled={zoom <= MIN_ZOOM + 0.001}
-          onClick={() => applyZoom(zoomRef.current - ZOOM_STEP)}
+          aria-disabled={atMinZoom}
+          data-zoom-action="out"
+          onPointerUp={onZoomPointer(-ZOOM_STEP)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              nudgeZoom(-ZOOM_STEP)
+            }
+          }}
         >
           <Minus className="size-4" aria-hidden="true" />
         </button>
@@ -429,26 +502,47 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           type="button"
           className="chart-zoom-btn chart-zoom-pct"
           aria-label={labels.zoomReset}
-          onClick={() => applyZoom(1)}
+          data-zoom-action="reset"
           title={labels.zoomReset}
+          onPointerUp={onZoomResetPointer}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              applyZoomRef.current(1)
+            }
+          }}
         >
           {zoomPct}%
         </button>
         <button
           type="button"
-          className="chart-zoom-btn"
+          className={`chart-zoom-btn${atMaxZoom ? ' is-disabled' : ''}`}
           aria-label={labels.zoomIn}
-          disabled={zoom >= MAX_ZOOM - 0.001}
-          onClick={() => applyZoom(zoomRef.current + ZOOM_STEP)}
+          aria-disabled={atMaxZoom}
+          data-zoom-action="in"
+          onPointerUp={onZoomPointer(ZOOM_STEP)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              nudgeZoom(ZOOM_STEP)
+            }
+          }}
         >
           <Plus className="size-4" aria-hidden="true" />
         </button>
-        {zoom > MIN_ZOOM + 0.001 && (
+        {!atMinZoom && (
           <button
             type="button"
             className="chart-zoom-btn"
             aria-label={labels.zoomReset}
-            onClick={() => applyZoom(1)}
+            data-zoom-action="reset-icon"
+            onPointerUp={onZoomResetPointer}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                applyZoomRef.current(1)
+              }
+            }}
           >
             <RotateCcw className="size-4" aria-hidden="true" />
           </button>
