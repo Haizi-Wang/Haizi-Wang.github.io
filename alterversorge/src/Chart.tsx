@@ -13,15 +13,15 @@ const STEPS = [1e4, 2e4, 5e4, 1e5, 2e5, 5e5, 1e6]
 const MIN_ZOOM = 1
 const MAX_ZOOM = 3
 const ZOOM_STEP = 0.35
-/** Default canvas height (~2× the old 400px) so charts read without zoom. */
-const BASE_H = 720
+/** Default canvas height: 0.6× the prior 720px default (~432). */
+const BASE_H = 432
 const PLOT_LEFT = 58
 const PLOT_RIGHT = 20
-const PLOT_TOP = 52
-const PLOT_BOTTOM = 108
+const PLOT_TOP = 32
+const PLOT_BOTTOM = 72
 const PLOT_H = BASE_H - PLOT_TOP - PLOT_BOTTOM
 const AXIS_Y = PLOT_TOP + PLOT_H
-const YEAR_LABEL_Y = AXIS_Y + 14
+const YEAR_LABEL_Y = AXIS_Y + 12
 /** Viewport shows the full chart at 100% zoom; pan only when user zooms in. */
 const SCROLL_MAX_H = BASE_H + 24
 
@@ -176,7 +176,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
       ctx.fillRect(PLOT_LEFT, PLOT_TOP, plotW, PLOT_H)
 
-      ctx.font = `13px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
@@ -237,9 +237,9 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.stroke()
       }
 
-      strokeLine((p) => p.own, OWN, 1.6)
-      strokeLine((p) => p.own + p.subsidy, SUBSIDY, 1.6)
-      strokeLine((p) => p.value, TOTAL, 2.75)
+      strokeLine((p) => p.own, OWN, 1.35)
+      strokeLine((p) => p.own + p.subsidy, SUBSIDY, 1.35)
+      strokeLine((p) => p.value, TOTAL, 2.4)
 
       if (activeIndex >= 0 && activeIndex <= last) {
         const x = xAt(activeIndex)
@@ -255,11 +255,11 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         const dot = (y: number, color: string) => {
           ctx.beginPath()
           ctx.fillStyle = '#f4faf8'
-          ctx.arc(x, y, 6.5, 0, Math.PI * 2)
+          ctx.arc(x, y, 5.5, 0, Math.PI * 2)
           ctx.fill()
           ctx.beginPath()
           ctx.fillStyle = color
-          ctx.arc(x, y, 4, 0, Math.PI * 2)
+          ctx.arc(x, y, 3.4, 0, Math.PI * 2)
           ctx.fill()
         }
         dot(yAt(p.own), OWN)
@@ -278,25 +278,25 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.stroke()
         ctx.setLineDash([])
         const tag = labels.age67
-        ctx.font = `600 13px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+        ctx.font = `600 11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
         const tw = ctx.measureText(tag).width
-        const left = x - tw / 2 - 8
+        const left = x - tw / 2 - 6
         ctx.fillStyle = '#0b3d4a'
         ctx.beginPath()
-        ctx.roundRect(left, 10, tw + 16, 20, 10)
+        ctx.roundRect(left, 6, tw + 12, 16, 8)
         ctx.fill()
         ctx.fillStyle = '#f4faf8'
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
-        ctx.fillText(tag, x, 20)
-        ctx.font = `600 22px 'Fraunces', 'Noto Serif SC', serif`
+        ctx.fillText(tag, x, 14)
+        ctx.font = `600 18px 'Fraunces', 'Noto Serif SC', serif`
         const phaseLabel = (text: string, from: number, to: number) => {
-          if (to - from < 96) return
+          if (to - from < 72) return
           const mid = (from + to) / 2
           const w = ctx.measureText(text).width
           ctx.fillStyle = 'rgba(244, 250, 248, 0.92)'
           ctx.beginPath()
-          ctx.roundRect(mid - w / 2 - 14, PLOT_TOP + 8, w + 28, 36, 14)
+          ctx.roundRect(mid - w / 2 - 12, PLOT_TOP + 4, w + 24, 28, 12)
           ctx.fill()
           ctx.strokeStyle = 'rgba(11, 61, 74, 0.2)'
           ctx.lineWidth = 1
@@ -304,16 +304,16 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           ctx.fillStyle = '#0b3d4a'
           ctx.textAlign = 'center'
           ctx.textBaseline = 'middle'
-          ctx.fillText(text, mid, PLOT_TOP + 26)
+          ctx.fillText(text, mid, PLOT_TOP + 18)
         }
         phaseLabel(labels.save, PLOT_LEFT, x)
         phaseLabel(labels.draw, x, PLOT_LEFT + plotW)
       }
 
-      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `10px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.fillStyle = '#5a6f74'
       // Avoid unreadable year-label pile-up when many points share one viewport width.
-      const yearStep = Math.max(1, Math.ceil(last / Math.max(Math.floor(plotW / 28), 8)))
+      const yearStep = Math.max(1, Math.ceil(last / Math.max(Math.floor(plotW / 26), 8)))
       for (let i = 0; i <= last; i++) {
         const x = xAt(i)
         const major = i === retireIdx || i === 0 || i === last || i % yearStep === 0
@@ -321,7 +321,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.strokeStyle = i === retireIdx ? '#0b3d4a' : 'rgba(11, 61, 74, 0.18)'
         ctx.lineWidth = 1
         ctx.moveTo(x, AXIS_Y)
-        ctx.lineTo(x, AXIS_Y + (i === retireIdx ? 9 : 5))
+        ctx.lineTo(x, AXIS_Y + (i === retireIdx ? 7 : 4))
         ctx.stroke()
         if (!major) continue
         ctx.save()
