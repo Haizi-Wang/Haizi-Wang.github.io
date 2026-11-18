@@ -289,11 +289,10 @@ a:hover {
 }
 
 /*
- * Charts default ~2× taller than the old 14rem clip so the full plot is visible
- * at 100% zoom; Chart.tsx also sets maxHeight to BASE_H+24 (~744px).
+ * Chart viewport fits BASE_H=432 (+ pad); Chart.tsx also sets maxHeight to BASE_H+24.
  */
 .rechner-page .chart-scroll {
-  max-height: 46.5rem;
+  max-height: 28.5rem;
 }
 
 .rechner-page .shell > .grid > section.panel > .mt-6.border-t {
