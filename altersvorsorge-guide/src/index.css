@@ -665,6 +665,11 @@ a:hover {
   line-height: 1.55;
 }
 
+.video-caption-intro {
+  color: var(--ink, #0b3d4a);
+  font-weight: 500;
+}
+
 .video-player {
   display: block;
   width: 100%;

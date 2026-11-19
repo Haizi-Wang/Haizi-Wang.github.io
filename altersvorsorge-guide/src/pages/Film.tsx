@@ -25,6 +25,7 @@ export default function Film() {
 
       <section className="video-block" aria-labelledby="chart-video-title">
         <h2 id="chart-video-title">{f.chartVideoTitle}</h2>
+        <p className="video-caption video-caption-intro">{f.chartVideoIntro}</p>
         <p className="video-caption">{f.chartVideoCaption}</p>
         <video
           className="video-player"
