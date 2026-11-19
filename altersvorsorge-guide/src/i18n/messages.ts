@@ -262,14 +262,18 @@ export const messages = {
     },
     film: {
       title: "影音资料",
-      lead: "先听口播说明；成片与分镜将在后续里程碑上线。",
+      lead: "先听口播说明，再看一则按计算器参数生成的账户增长示意动画；正式介绍片将在后续里程碑上线。",
       audioTitle: "口播音频",
       audioCaption:
         "《德国养老金存300送1050》——用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
       audioFallback: "您的浏览器不支持音频播放。",
-      download: "下载音频",
-      videoTitle: "影片制作中",
-      videoNote: "正式介绍片将在此上线，并可与上方教育路径交叉链接。",
+      downloadAudio: "下载音频",
+      chartVideoTitle: "每月 30€ 养老账户增长示意",
+      chartVideoCaption:
+        "动画按站内计算器「资产增长（退休时不一次性提取）」情景生成：每月投资 30 €、出生年份 2004、子女数 0；预期年化收益 7.0%、有效成本 0.1%（有效约 6.9%）。退休峰值约 149,229 €（2071 年、67 岁），随后提领至约 0。仅为教育示意，非正式投顾意见。",
+      videoFallback: "您的浏览器不支持视频播放。",
+      downloadVideo: "下载视频",
+      introFilmNote: "正式介绍片仍在制作中，上线后将与上方教育路径交叉链接。",
     },
   },
   en: {
@@ -535,14 +539,18 @@ export const messages = {
     },
     film: {
       title: "Audio & video",
-      lead: "Start with the voice-over; the finished film and storyboard will follow in a later milestone.",
+      lead: "Start with the voice-over, then watch a growth animation built from calculator inputs; the formal intro film will follow in a later milestone.",
       audioTitle: "Voice-over audio",
       audioCaption:
         "“German pension: save 300, get 1,050” — a simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
       audioFallback: "Your browser does not support audio playback.",
-      download: "Download audio",
-      videoTitle: "Film in production",
-      videoNote: "The formal intro film will appear here and link into the learning path above.",
+      downloadAudio: "Download audio",
+      chartVideoTitle: "€30/month pension account growth",
+      chartVideoCaption:
+        "Animation from the on-site calculator scenario “asset growth (no lump-sum withdrawal at retirement)”: €30/month, birth year 2004, 0 children; expected return 7.0% p.a. and effective cost 0.1% (about 6.9% net). Peak about €149,229 at age 67 in 2071, then drawdown toward ~0. Educational illustration only — not advice.",
+      videoFallback: "Your browser does not support video playback.",
+      downloadVideo: "Download video",
+      introFilmNote: "The formal intro film is still in production and will link into the learning path when published.",
     },
   },
 } as const;
