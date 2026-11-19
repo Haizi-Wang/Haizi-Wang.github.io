@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useI18n } from "../i18n/I18nProvider";
 
 const AUDIO_SRC = `${import.meta.env.BASE_URL}assets/alterversorge.mp3`;
@@ -16,6 +16,7 @@ export default function Film() {
   const { t } = useI18n();
   const f = t.film;
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
 
   const showLastFrame = useCallback(() => {
     const el = videoRef.current;
@@ -26,6 +27,7 @@ export default function Film() {
     } catch {
       /* ignore seek before ready */
     }
+    setPlaying(false);
   }, []);
 
   const playFromStart = useCallback(() => {
@@ -39,19 +41,20 @@ export default function Film() {
     }
     const play = el.play();
     if (play && typeof play.catch === "function") {
-      play.catch(() => {
-        /* autoplay may be blocked; last-frame poster stays */
-      });
+      play
+        .then(() => setPlaying(true))
+        .catch(() => {
+          setPlaying(false);
+        });
+    } else {
+      setPlaying(true);
     }
   }, []);
 
-  /** Click to play from start; click again (while playing) returns to last frame. */
   const onActivate = useCallback(() => {
-    const el = videoRef.current;
-    if (!el) return;
-    if (el.paused) playFromStart();
-    else showLastFrame();
-  }, [playFromStart, showLastFrame]);
+    if (playing) return;
+    playFromStart();
+  }, [playing, playFromStart]);
 
   return (
     <>
@@ -73,13 +76,7 @@ export default function Film() {
         <h2 id="chart-video-title">{f.chartVideoTitle}</h2>
         <p className="video-caption video-caption-intro">{f.chartVideoIntro}</p>
         <p className="video-caption">{f.chartVideoCaption}</p>
-        <div
-          className="video-frame"
-          onMouseLeave={showLastFrame}
-          onPointerLeave={(e) => {
-            if (e.pointerType === "touch" || e.pointerType === "pen") showLastFrame();
-          }}
-        >
+        <div className={`video-frame${playing ? " is-playing" : ""}`}>
           <video
             ref={videoRef}
             className="video-player"
@@ -88,7 +85,7 @@ export default function Film() {
             preload="auto"
             poster={CHART_POSTER_SRC}
             src={CHART_VIDEO_SRC}
-            tabIndex={0}
+            tabIndex={playing ? -1 : 0}
             aria-label={f.chartVideoTitle}
             onClick={onActivate}
             onKeyDown={(e) => {
@@ -107,11 +104,21 @@ export default function Film() {
                 }
               }
             }}
+            onPlay={() => setPlaying(true)}
             onEnded={showLastFrame}
           >
             {f.videoFallback}{" "}
             <a href={CHART_VIDEO_SRC}>{f.downloadVideo}</a>
           </video>
+          <button
+            type="button"
+            className="video-play-btn"
+            onClick={onActivate}
+            aria-hidden={playing}
+            tabIndex={playing ? -1 : 0}
+          >
+            {f.chartVideoPlay}
+          </button>
         </div>
         <p className="video-aside">{f.introFilmNote}</p>
       </section>

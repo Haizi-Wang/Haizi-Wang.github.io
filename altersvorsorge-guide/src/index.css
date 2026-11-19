@@ -678,6 +678,9 @@ a:hover {
   background: #eef6f3;
   border: 1px solid rgba(11, 61, 74, 0.12);
   box-shadow: none;
+}
+
+.video-frame:not(.is-playing) {
   cursor: pointer;
 }
 
@@ -695,6 +698,43 @@ a:hover {
 .video-player:focus-visible {
   outline: 2px solid var(--primary-soft, #2a7a8c);
   outline-offset: 3px;
+}
+
+.video-play-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  margin: 0;
+  padding: 0.7rem 1.35rem;
+  border: 1px solid rgba(11, 61, 74, 0.18);
+  border-radius: 999px;
+  background: rgba(244, 250, 248, 0.94);
+  color: #0b3d4a;
+  font: 600 1rem/1.2 var(--display, "Fraunces", "Noto Serif SC", serif);
+  letter-spacing: 0.02em;
+  box-shadow: 0 8px 24px rgba(11, 61, 74, 0.12);
+  cursor: pointer;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease,
+    background 0.2s ease;
+}
+
+.video-play-btn:hover {
+  background: #fff;
+}
+
+.video-play-btn:focus-visible {
+  outline: 2px solid var(--primary-soft, #2a7a8c);
+  outline-offset: 3px;
+}
+
+.video-frame.is-playing .video-play-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.96);
 }
 
 .video-aside {
