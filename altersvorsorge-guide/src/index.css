@@ -646,7 +646,6 @@ a:hover {
   border-radius: 1.1rem;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.62);
-  box-shadow: 0 14px 40px rgba(11, 61, 74, 0.06);
   max-width: 52rem;
   animation: rise-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -670,15 +669,32 @@ a:hover {
   font-weight: 500;
 }
 
+.video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #eef6f3;
+  border: 1px solid rgba(11, 61, 74, 0.12);
+  box-shadow: none;
+  cursor: pointer;
+}
+
 .video-player {
   display: block;
   width: 100%;
-  max-width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  border-radius: 0.75rem;
-  background: #0b3d4a;
-  border: 1px solid rgba(11, 61, 74, 0.12);
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+  border: 0;
+  vertical-align: top;
+}
+
+.video-player:focus-visible {
+  outline: 2px solid var(--primary-soft, #2a7a8c);
+  outline-offset: 3px;
 }
 
 .video-aside {
