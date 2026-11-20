@@ -266,9 +266,9 @@ export const messages = {
       audioTitle: "口播 1 · 德国养老金存300送1050",
       audioCaption:
         "用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
-      audio2Title: "更正口播 1 中关于17%条款的错误，并与美国 401(k) 养老账户作比较。",
+      audio2Title: "口播 2",
       audio2Caption:
-        "更正口播 1 中关于 17% 条款的错误，并与美国 401(k) 养老账户作比较（估算示意，非正式投顾意见）。",
+        "更正口播 1 中关于17%条款的错误，并与美国 401(k) 养老账户作比较。",
       audioFallback: "您的浏览器不支持音频播放。",
       downloadAudio: "下载音频",
       chartVideoTitle: "每月 30€ 养老账户增长示意",
@@ -551,10 +551,9 @@ export const messages = {
       audioTitle: "Voice-over 1 · German pension: save 300, get 1,050",
       audioCaption:
         "A simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
-      audio2Title:
-        "Corrects the 17% provision error in voice-over 1, and compares with the US 401(k) retirement account.",
+      audio2Title: "Voice-over 2",
       audio2Caption:
-        "Corrects the 17% provision error in voice-over 1, and compares with the US 401(k) retirement account (illustrative estimate, not advice).",
+        "Corrects the 17% provision error in voice-over 1, and compares with the US 401(k) retirement account.",
       audioFallback: "Your browser does not support audio playback.",
       downloadAudio: "Download audio",
       chartVideoTitle: "€30/month pension account growth",
