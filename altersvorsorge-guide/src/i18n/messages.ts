@@ -268,7 +268,7 @@ export const messages = {
         "用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
       audio2Title: "口播 2 养老金越存越穷？",
       audio2Caption:
-        "更正口播 1 中关于17%条款的错误，并与美国 401(k) 养老账户作比较。",
+        "更正口播 1 中关于17%条款的错误，并与美国 401(k) 养老账户作比较。未补贴部分在定期提取（Auszahlplan）下的税法适用链条：§ 22 Nr. 5 S. 2 Buchst. b EStG → § 20 Abs. 1 Nr. 6 S. 2 EStG → § 52 Abs. 28 S. 15 EStG",
       audioFallback: "您的浏览器不支持音频播放。",
       downloadAudio: "下载音频",
       chartVideoTitle: "每月 30€ 养老账户增长示意",
@@ -553,7 +553,7 @@ export const messages = {
         "A simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
       audio2Title: "Voice-over 2: Saving more, getting poorer?",
       audio2Caption:
-        "Corrects the 17% provision error in voice-over 1, and compares with the US 401(k) retirement account.",
+        "Corrects the 17% provision error in voice-over 1, and compares with the US 401(k) retirement account. Tax chain for the unsubsidised portion under a scheduled payout (Auszahlplan): § 22 Nr. 5 S. 2 Buchst. b EStG → § 20 Abs. 1 Nr. 6 S. 2 EStG → § 52 Abs. 28 S. 15 EStG",
       audioFallback: "Your browser does not support audio playback.",
       downloadAudio: "Download audio",
       chartVideoTitle: "€30/month pension account growth",
