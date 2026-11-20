@@ -262,7 +262,7 @@ export const messages = {
     },
     film: {
       title: "影音资料",
-      lead: "先听两则口播说明，再看一则按计算器参数生成的账户增长示意；正式介绍片将在后续里程碑上线。",
+      lead: "先听两则口播说明，再看一则按计算器参数生成的账户增长示意。",
       audioTitle: "口播 1 德国养老金存300送1050？",
       audioCaption:
         "用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
@@ -546,7 +546,7 @@ export const messages = {
     },
     film: {
       title: "Audio & video",
-      lead: "Start with the two voice-overs, then watch a growth illustration built from calculator inputs; the formal intro film will follow in a later milestone.",
+      lead: "Start with the two voice-overs, then watch a growth illustration built from calculator inputs.",
       audioTitle: "Voice-over 1: German pension: save 300, get 1,050?",
       audioCaption:
         "A simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
