@@ -262,10 +262,14 @@ export const messages = {
     },
     film: {
       title: "影音资料",
-      lead: "先听口播说明，再看一则按计算器参数生成的账户增长示意；正式介绍片将在后续里程碑上线。",
-      audioTitle: "口播音频",
+      lead: "先听两则口播说明，再看一则按计算器参数生成的账户增长示意；正式介绍片将在后续里程碑上线。",
+      audioTitle: "口播 1 · 德国养老金存300送1050",
       audioCaption:
-        "《德国养老金存300送1050》——用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
+        "用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
+      audio2Badge: "口播 1 补充",
+      audio2Title: "德国养老金越存越穷（口播 2 / 补充）",
+      audio2Caption:
+        "本段为口播 1 的补充说明，进一步讨论「越存越穷」相关误区与账户逻辑（估算示意，非正式投顾意见）。",
       audioFallback: "您的浏览器不支持音频播放。",
       downloadAudio: "下载音频",
       chartVideoTitle: "每月 30€ 养老账户增长示意",
@@ -544,10 +548,14 @@ export const messages = {
     },
     film: {
       title: "Audio & video",
-      lead: "Start with the voice-over, then watch a growth illustration built from calculator inputs; the formal intro film will follow in a later milestone.",
-      audioTitle: "Voice-over audio",
+      lead: "Start with the two voice-overs, then watch a growth illustration built from calculator inputs; the formal intro film will follow in a later milestone.",
+      audioTitle: "Voice-over 1 · German pension: save 300, get 1,050",
       audioCaption:
-        "“German pension: save 300, get 1,050” — a simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
+        "A simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
+      audio2Badge: "Supplement to voice-over 1",
+      audio2Title: "“Saving more, getting poorer?” (voice-over 2 / supplement)",
+      audio2Caption:
+        "A supplement to voice-over 1 — clarifying the “saving more, getting poorer” misconception and how the account works (illustrative estimate, not advice).",
       audioFallback: "Your browser does not support audio playback.",
       downloadAudio: "Download audio",
       chartVideoTitle: "€30/month pension account growth",
