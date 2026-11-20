@@ -45,7 +45,10 @@ export const messages = {
         { time: "2025-12-17", text: "联邦内阁通过政府草案" },
         { time: "2026-03-27", text: "联邦议院通过修订后的法律" },
         { time: "2026-05-08", text: "联邦参议院批准" },
-        { time: "2026-05-29", text: "《Altersvorsorgereformgesetz》正式公布（AVR Gz 29Mai2026）" },
+        {
+          time: "2026-05-29",
+          text: "《Altersvorsorgereformgesetz》正式公布（AVR Gz 29Mai2026）。在德国法律体系中，AVR Gz 29Mai2026 是一部典型的“一揽子修订法”（Artikelgesetz）——它本身不是一部独立的日常适用法典，而是通过不同的条款集中修改现有《养老合同认证法》（AltZertG）和《所得税法》（EStG）中的具体条文。",
+        },
         { time: "2027-01-01", text: "新产品及补贴体系主要规定开始实施" },
       ],
       pathAria: "学习路径",
@@ -327,7 +330,10 @@ export const messages = {
         { time: "2025-12-17", text: "Federal Cabinet adopts the government draft" },
         { time: "2026-03-27", text: "Bundestag passes the amended law" },
         { time: "2026-05-08", text: "Bundesrat approves" },
-        { time: "2026-05-29", text: "Altersvorsorgereformgesetz published (AVR Gz 29Mai2026)" },
+        {
+          time: "2026-05-29",
+          text: "Altersvorsorgereformgesetz published (AVR Gz 29Mai2026). In the German legal system, AVR Gz 29Mai2026 is a typical “omnibus amending act” (Artikelgesetz) — it is not a freestanding code for everyday application, but instead amends specific provisions of the existing Pension Contract Certification Act (AltZertG) and Income Tax Act (EStG) through different articles.",
+        },
         { time: "2027-01-01", text: "Main rules for new products and subsidies take effect" },
       ],
       pathAria: "Learning path",
