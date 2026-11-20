@@ -243,7 +243,7 @@ export const messages = {
       taxTitle: "受补贴 vs. 未受补贴资金的税务要点",
       taxItems: [
         "受补贴 / 税前扣除部分（常见口径：每年约不超过 1,800 欧元相关路径）：提领时适用后置征税（Nachgelagerte Besteuerung），发放额全额进入个税税基。",
-        "超额未受补贴部分（自付可至约 6,840 欧元 / 年上限内超出补贴口径的部分）：存入时已是税后资金；提领时本金不二次全额征税，收益侧适用 Ertragsanteil（收益比例）等规则。例如 67 岁开始领取时，法定收益比例约 17%，即按月发放中约 17% 进入税基、约 83% 视为归还本金免税。",
+        "超额未受补贴部分（自付可至约 6,840 欧元 / 年上限内超出补贴口径的部分）：存入时已是税后资金；提领时本金不二次全额征税，收益部分适用于减半征规则，§ 20 Abs. 1 Nr. 6 EStG。",
       ],
       twoLabel: "两个合规账户：",
       two:
@@ -530,7 +530,7 @@ export const messages = {
       taxTitle: "Subsidised vs unsubsidised capital — tax notes",
       taxItems: [
         "Subsidised / pre-tax deduction path (often up to about €1,800 / year): payouts are taxed later (Nachgelagerte Besteuerung); the full payment enters the income-tax base.",
-        "Excess unsubsidised part (own contributions up to about €6,840 / year beyond the subsidy path): contributions were after-tax; at payout the capital is not fully taxed again, while gains follow Ertragsanteil rules. E.g. starting at 67, the statutory earnings share is about 17% — roughly 17% of monthly payments enter the tax base and about 83% is treated as tax-free return of capital.",
+        "Excess unsubsidised part (own contributions up to about €6,840 / year beyond the subsidy path): contributions were after-tax; at payout the capital is not fully taxed again, and the gains portion is subject to the half-taxation rule, § 20 Abs. 1 Nr. 6 EStG.",
       ],
       twoLabel: "Two compliant accounts: ",
       two:
