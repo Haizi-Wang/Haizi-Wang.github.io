@@ -5,6 +5,8 @@ const AUDIO_SRC = `${import.meta.env.BASE_URL}assets/alterversorge.mp3`;
 const CHART_VIDEO_SRC = `${import.meta.env.BASE_URL}assets/chart-anim-2004-30eur.mp4`;
 const CHART_POSTER_SRC = `${import.meta.env.BASE_URL}assets/chart-anim-2004-30eur-poster.jpg`;
 
+type VideoPhase = "idle" | "playing" | "paused";
+
 function seekNearEnd(el: HTMLVideoElement) {
   const d = el.duration;
   if (!Number.isFinite(d) || d <= 0) return;
@@ -16,7 +18,7 @@ export default function Film() {
   const { t } = useI18n();
   const f = t.film;
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  const [phase, setPhase] = useState<VideoPhase>("idle");
 
   const showLastFrame = useCallback(() => {
     const el = videoRef.current;
@@ -27,7 +29,7 @@ export default function Film() {
     } catch {
       /* ignore seek before ready */
     }
-    setPlaying(false);
+    setPhase("idle");
   }, []);
 
   const playFromStart = useCallback(() => {
@@ -42,19 +44,46 @@ export default function Film() {
     const play = el.play();
     if (play && typeof play.catch === "function") {
       play
-        .then(() => setPlaying(true))
-        .catch(() => {
-          setPlaying(false);
-        });
+        .then(() => setPhase("playing"))
+        .catch(() => setPhase("idle"));
     } else {
-      setPlaying(true);
+      setPhase("playing");
     }
   }, []);
 
+  const resume = useCallback(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = true;
+    const play = el.play();
+    if (play && typeof play.catch === "function") {
+      play
+        .then(() => setPhase("playing"))
+        .catch(() => setPhase("paused"));
+    } else {
+      setPhase("playing");
+    }
+  }, []);
+
+  const pause = useCallback(() => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.pause();
+    setPhase("paused");
+  }, []);
+
   const onActivate = useCallback(() => {
-    if (playing) return;
-    playFromStart();
-  }, [playing, playFromStart]);
+    if (phase === "idle") playFromStart();
+    else if (phase === "playing") pause();
+    else resume();
+  }, [phase, playFromStart, pause, resume]);
+
+  const buttonLabel =
+    phase === "playing"
+      ? f.chartVideoPause
+      : phase === "paused"
+        ? f.chartVideoResume
+        : f.chartVideoPlay;
 
   return (
     <>
@@ -76,7 +105,7 @@ export default function Film() {
         <h2 id="chart-video-title">{f.chartVideoTitle}</h2>
         <p className="video-caption video-caption-intro">{f.chartVideoIntro}</p>
         <p className="video-caption">{f.chartVideoCaption}</p>
-        <div className={`video-frame${playing ? " is-playing" : ""}`}>
+        <div className={`video-frame is-${phase}`}>
           <video
             ref={videoRef}
             className="video-player"
@@ -85,7 +114,7 @@ export default function Film() {
             preload="auto"
             poster={CHART_POSTER_SRC}
             src={CHART_VIDEO_SRC}
-            tabIndex={playing ? -1 : 0}
+            tabIndex={0}
             aria-label={f.chartVideoTitle}
             onClick={onActivate}
             onKeyDown={(e) => {
@@ -96,7 +125,7 @@ export default function Film() {
             }}
             onLoadedMetadata={(e) => {
               const el = e.currentTarget;
-              if (el.paused) {
+              if (el.paused && phase === "idle") {
                 try {
                   seekNearEnd(el);
                 } catch {
@@ -104,7 +133,7 @@ export default function Film() {
                 }
               }
             }}
-            onPlay={() => setPlaying(true)}
+            onPlay={() => setPhase("playing")}
             onEnded={showLastFrame}
           >
             {f.videoFallback}{" "}
@@ -112,12 +141,10 @@ export default function Film() {
           </video>
           <button
             type="button"
-            className="video-play-btn"
+            className={`video-play-btn${phase === "playing" ? " is-dim" : ""}`}
             onClick={onActivate}
-            aria-hidden={playing}
-            tabIndex={playing ? -1 : 0}
           >
-            {f.chartVideoPlay}
+            {buttonLabel}
           </button>
         </div>
         <p className="video-aside">{f.introFilmNote}</p>
