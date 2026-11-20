@@ -157,7 +157,6 @@ export default function Film() {
             {buttonLabel}
           </button>
         </div>
-        <p className="video-aside">{f.introFilmNote}</p>
       </section>
     </>
   );
