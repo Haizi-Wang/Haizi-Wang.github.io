@@ -274,6 +274,8 @@ export const messages = {
       chartVideoCaption:
         "按站内计算器「资产增长（退休时不一次性提取）」情景生成：每月投资 30 €、出生年份 2004、子女数 0；预期年化收益 7.0%、有效成本 0.1%（有效收益 6.9%）。退休峰值约 149,229 €（2071 年、67 岁），随后提领至约 0。仅为教育示意，非正式投顾意见。",
       chartVideoPlay: "请点击",
+      chartVideoPause: "暂停",
+      chartVideoResume: "继续",
       videoFallback: "您的浏览器不支持视频播放。",
       downloadVideo: "下载视频",
       introFilmNote: "正式介绍片仍在制作中，上线后将与上方教育路径交叉链接。",
@@ -554,6 +556,8 @@ export const messages = {
       chartVideoCaption:
         "Generated from the on-site calculator scenario “asset growth (no lump-sum withdrawal at retirement)”: €30/month, birth year 2004, 0 children; expected return 7.0% p.a. and effective cost 0.1% (effective return 6.9%). Peak about €149,229 at age 67 in 2071, then drawdown toward ~0. Educational illustration only — not advice.",
       chartVideoPlay: "Click to play",
+      chartVideoPause: "Pause",
+      chartVideoResume: "Continue",
       videoFallback: "Your browser does not support video playback.",
       downloadVideo: "Download video",
       introFilmNote: "The formal intro film is still in production and will link into the learning path when published.",
