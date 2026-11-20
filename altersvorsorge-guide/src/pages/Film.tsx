@@ -2,6 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { useI18n } from "../i18n/I18nProvider";
 
 const AUDIO_SRC = `${import.meta.env.BASE_URL}assets/alterversorge.mp3`;
+const AUDIO2_SRC = `${import.meta.env.BASE_URL}assets/alterversorge-koubo-2.m4a`;
 const CHART_VIDEO_SRC = `${import.meta.env.BASE_URL}assets/chart-anim-2004-30eur.mp4`;
 const CHART_POSTER_SRC = `${import.meta.env.BASE_URL}assets/chart-anim-2004-30eur-poster.jpg`;
 
@@ -98,6 +99,16 @@ export default function Film() {
         <audio className="audio-player" controls preload="metadata" src={AUDIO_SRC}>
           {f.audioFallback}{" "}
           <a href={AUDIO_SRC}>{f.downloadAudio}</a>
+        </audio>
+      </section>
+
+      <section className="audio-block audio-block-supplement" aria-labelledby="audio2-title">
+        <p className="audio-badge">{f.audio2Badge}</p>
+        <h2 id="audio2-title">{f.audio2Title}</h2>
+        <p className="audio-caption">{f.audio2Caption}</p>
+        <audio className="audio-player" controls preload="metadata" src={AUDIO2_SRC}>
+          {f.audioFallback}{" "}
+          <a href={AUDIO2_SRC}>{f.downloadAudio}</a>
         </audio>
       </section>
 

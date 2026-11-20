@@ -640,6 +640,23 @@ a:hover {
   height: 2.75rem;
 }
 
+.audio-block-supplement {
+  border-style: dashed;
+}
+
+.audio-badge {
+  display: inline-block;
+  margin: 0 0 0.55rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(42, 122, 140, 0.28);
+  background: rgba(42, 122, 140, 0.08);
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .video-block {
   margin: 0.5rem 0 1.75rem;
   padding: 1.35rem 1.35rem 1.5rem;
