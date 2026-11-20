@@ -266,10 +266,9 @@ export const messages = {
       audioTitle: "口播 1 · 德国养老金存300送1050",
       audioCaption:
         "用一个简单数字例子，说明缴费与补贴如何叠加（估算示意，非正式投顾意见）。",
-      audio2Badge: "口播 1 补充",
-      audio2Title: "德国养老金越存越穷（口播 2 / 补充）",
+      audio2Title: "口播 2 更正 1 中的错误并和美国401 K 养老账户比较。",
       audio2Caption:
-        "本段为口播 1 的补充说明，进一步讨论「越存越穷」相关误区与账户逻辑（估算示意，非正式投顾意见）。",
+        "口播 2：更正口播 1 中的错误，并与美国 401(k) 养老账户作比较（估算示意，非正式投顾意见）。",
       audioFallback: "您的浏览器不支持音频播放。",
       downloadAudio: "下载音频",
       chartVideoTitle: "每月 30€ 养老账户增长示意",
@@ -552,10 +551,10 @@ export const messages = {
       audioTitle: "Voice-over 1 · German pension: save 300, get 1,050",
       audioCaption:
         "A simple numbers example of how contributions and subsidies stack (illustrative estimate, not advice).",
-      audio2Badge: "Supplement to voice-over 1",
-      audio2Title: "“Saving more, getting poorer?” (voice-over 2 / supplement)",
+      audio2Title:
+        "Voice-over 2 corrects errors in voice-over 1 and compares with the US 401(k) retirement account.",
       audio2Caption:
-        "A supplement to voice-over 1 — clarifying the “saving more, getting poorer” misconception and how the account works (illustrative estimate, not advice).",
+        "Voice-over 2: corrects mistakes from voice-over 1 and compares the German account with the US 401(k) (illustrative estimate, not advice).",
       audioFallback: "Your browser does not support audio playback.",
       downloadAudio: "Download audio",
       chartVideoTitle: "€30/month pension account growth",

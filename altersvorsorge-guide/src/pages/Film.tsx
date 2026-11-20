@@ -103,7 +103,6 @@ export default function Film() {
       </section>
 
       <section className="audio-block audio-block-supplement" aria-labelledby="audio2-title">
-        <p className="audio-badge">{f.audio2Badge}</p>
         <h2 id="audio2-title">{f.audio2Title}</h2>
         <p className="audio-caption">{f.audio2Caption}</p>
         <audio className="audio-player" controls preload="metadata" src={AUDIO2_SRC}>
