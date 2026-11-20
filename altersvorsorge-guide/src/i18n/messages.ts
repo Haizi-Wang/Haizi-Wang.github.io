@@ -281,7 +281,6 @@ export const messages = {
       chartVideoResume: "继续",
       videoFallback: "您的浏览器不支持视频播放。",
       downloadVideo: "下载视频",
-      introFilmNote: "正式介绍片仍在制作中，上线后将与上方教育路径交叉链接。",
     },
   },
   en: {
@@ -566,7 +565,6 @@ export const messages = {
       chartVideoResume: "Continue",
       videoFallback: "Your browser does not support video playback.",
       downloadVideo: "Download video",
-      introFilmNote: "The formal intro film is still in production and will link into the learning path when published.",
     },
   },
 } as const;
