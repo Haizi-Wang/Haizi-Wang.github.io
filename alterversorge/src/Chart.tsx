@@ -234,7 +234,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
       ctx.fillRect(PLOT_LEFT, PLOT_TOP, plotW, PLOT_H)
 
-      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `12px 'Source Sans 3', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif`
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
@@ -337,7 +337,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.stroke()
         ctx.setLineDash([])
         const tag = labels.age67
-        ctx.font = `600 11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+        ctx.font = `600 11px 'Source Sans 3', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif`
         const tw = ctx.measureText(tag).width
         const left = x - tw / 2 - 6
         ctx.fillStyle = '#0b3d4a'
@@ -348,7 +348,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
         ctx.fillText(tag, x, 14)
-        ctx.font = `600 15px 'Fraunces', 'Noto Serif SC', serif`
+        ctx.font = `600 15px 'Fraunces', 'Songti SC', 'Noto Serif CJK SC', 'Source Han Serif SC', 'SimSun', serif`
         const phaseLabel = (text: string, from: number, to: number) => {
           if (to - from < 64) return
           const mid = (from + to) / 2
@@ -369,7 +369,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         phaseLabel(labels.draw, x, PLOT_LEFT + plotW)
       }
 
-      ctx.font = `11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `11px 'Source Sans 3', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif`
       ctx.fillStyle = '#5a6f74'
       // Avoid unreadable year-label pile-up when many points share one viewport width.
       const yearStep = Math.max(1, Math.ceil(last / Math.max(Math.floor(plotW / 26), 8)))
