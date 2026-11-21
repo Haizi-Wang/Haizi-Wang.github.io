@@ -33,23 +33,49 @@ export default function Film() {
     setPhase("idle");
   }, []);
 
+  /** Seek to t=0 and only then play — avoids stalling after idle seek-to-end on long GOPs. */
   const playFromStart = useCallback(() => {
     const el = videoRef.current;
     if (!el) return;
     el.muted = true;
+
+    const startPlayback = () => {
+      const play = el.play();
+      if (play && typeof play.catch === "function") {
+        play
+          .then(() => setPhase("playing"))
+          .catch(() => setPhase("idle"));
+      } else {
+        setPhase("playing");
+      }
+    };
+
+    // If we were parked near EOF for the rest frame, wait for seeked before play().
+    if (el.currentTime > 0.05) {
+      let started = false;
+      const onSeeked = () => {
+        if (started) return;
+        started = true;
+        el.removeEventListener("seeked", onSeeked);
+        window.clearTimeout(fallback);
+        startPlayback();
+      };
+      const fallback = window.setTimeout(onSeeked, 400);
+      el.addEventListener("seeked", onSeeked);
+      try {
+        el.currentTime = 0;
+      } catch {
+        onSeeked();
+      }
+      return;
+    }
+
     try {
       el.currentTime = 0;
     } catch {
       /* ignore */
     }
-    const play = el.play();
-    if (play && typeof play.catch === "function") {
-      play
-        .then(() => setPhase("playing"))
-        .catch(() => setPhase("idle"));
-    } else {
-      setPhase("playing");
-    }
+    startPlayback();
   }, []);
 
   const resume = useCallback(() => {
