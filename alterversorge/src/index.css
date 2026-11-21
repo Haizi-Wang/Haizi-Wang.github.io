@@ -60,6 +60,7 @@ body::after {
     linear-gradient(rgba(11, 61, 74, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(11, 61, 74, 0.03) 1px, transparent 1px);
   background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(circle at 40% 20%, black, transparent 75%);
   mask-image: radial-gradient(circle at 40% 20%, black, transparent 75%);
   animation: drift 28s ease-in-out infinite alternate;
 }
@@ -94,6 +95,15 @@ body::after {
   }
 }
 
+/* Keyboard focus: visible on every interactive control. */
+button:focus-visible,
+.range:focus-visible,
+.chart-scroll canvas:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary-soft);
+  outline-offset: 2px;
+}
+
 .font-display {
   font-family: var(--display);
   font-optical-sizing: auto;
@@ -105,18 +115,28 @@ body::after {
 
 .panel {
   background: var(--panel);
+  -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
   border: 1px solid var(--line);
   box-shadow: 0 18px 50px rgba(11, 61, 74, 0.08);
 }
 
+/* Solid colour first; the gradient text only applies where background-clip: text works. */
 .hero-glow {
-  background: linear-gradient(120deg, #0b3d4a, #1f6b52, #2a7a8c, #0b3d4a);
-  background-size: 220% 220%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer 10s ease-in-out infinite;
+  color: var(--primary);
+  text-wrap: balance;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-glow {
+    background: linear-gradient(120deg, #0b3d4a, #1f6b52, #2a7a8c, #0b3d4a);
+    background-size: 220% 220%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 10s ease-in-out infinite;
+  }
 }
 
 .field {
@@ -176,6 +196,29 @@ body::after {
   border-top: 1px solid var(--line);
 }
 
+/* Touch screens: put − and + side by side so each target is at least 44px. */
+@media (pointer: coarse) {
+  .stepper {
+    width: 5.5rem;
+    flex-direction: row;
+  }
+
+  .stepper button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+
+  .stepper button + button {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
+
+  .tip-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
 .range {
   width: 100%;
   accent-color: var(--primary);
@@ -194,10 +237,11 @@ body::after {
 
 .lang-switch button {
   flex: 1;
+  min-height: 2.25rem;
   border: 0;
   border-radius: 999px;
-  padding: 0.4rem 0.35rem;
-  font-size: 0.72rem;
+  padding: 0.45rem 0.35rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   cursor: pointer;
   background: transparent;
@@ -237,7 +281,7 @@ body::after {
   background: var(--primary);
   color: #eef7f4;
   padding: 0.75rem 0.85rem;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   line-height: 1.55;
   font-weight: 400;
   animation: rise-in 0.25s ease both;
@@ -314,6 +358,14 @@ body::after {
 
 .chart-zoom-layer canvas {
   transform-origin: top left;
+}
+
+/* Save battery on phones: no always-on background animation. */
+@media (max-width: 640px), (pointer: coarse) {
+  body::after,
+  .orb {
+    animation: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
