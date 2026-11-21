@@ -9,8 +9,8 @@
   --good: #1f6b52;
   --accent: #2a7a8c;
   --glow: rgba(126, 200, 184, 0.35);
-  --display: "Fraunces", "Noto Serif SC", "Songti SC", serif;
-  --sans: "Source Sans 3", "Noto Sans SC", "PingFang SC", sans-serif;
+  --display: "Fraunces", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif;
+  --sans: "Source Sans 3", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   --max: 72rem;
   --content: 44rem;
   color-scheme: light;
@@ -726,7 +726,7 @@ a:hover {
   border-radius: 999px;
   background: rgba(244, 250, 248, 0.94);
   color: #0b3d4a;
-  font: 600 1rem/1.2 var(--display, "Fraunces", "Noto Serif SC", serif);
+  font: 600 1rem/1.2 var(--display, "Fraunces", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "SimSun", serif);
   letter-spacing: 0.02em;
   box-shadow: 0 8px 24px rgba(11, 61, 74, 0.12);
   cursor: pointer;
