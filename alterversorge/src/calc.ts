@@ -5,6 +5,9 @@ export const DRAW_YEARS = 18 // ages 67–85
 export const MIN_ANNUAL_FOR_SUBSIDY = 120
 export const MAX_MONTHLY_CONTRIBUTION = 570 // €6,840 / year
 export const MAX_SUBSIDISED_ANNUAL = 1800
+export const CHILD_SUBSIDY_PER_CHILD = 300
+/** A child counts while aged 0–24 (Kindergeld-style window, simplified). */
+export const CHILD_MAX_AGE = 24
 
 export type Phase = 'save' | 'draw'
 
@@ -37,10 +40,11 @@ export type CalcResult = {
   foerderung: number
   annualWithdraw: number
   lumpSum: number
-  monthlyNetLow: number
-  monthlyNetHigh: number
   points: Point[]
 }
+
+const num = (v: number, fallback = 0) => (Number.isFinite(v) ? v : fallback)
+const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v))
 
 /** Grundzulage: 50% on first €360, 25% on next up to €1,800. Needs ≥ €120/year. */
 export function basicSubsidy(annualOwn: number): number {
@@ -50,13 +54,16 @@ export function basicSubsidy(annualOwn: number): number {
   return tier1 * 0.5 + tier2 * 0.25
 }
 
-/** Kinderzulage: 100% match up to €300 per eligible child. Needs ≥ €120/year. */
+/**
+ * Kinderzulage: 1:1 match up to €300 per eligible child. Needs ≥ €120/year.
+ * Conservative assumption: the match can never exceed your own annual contribution.
+ */
 export function childSubsidy(annualOwn: number, eligibleChildren: number): number {
   if (eligibleChildren <= 0 || annualOwn < MIN_ANNUAL_FOR_SUBSIDY) return 0
-  return Math.min(annualOwn, 300) * eligibleChildren
+  return Math.min(annualOwn, CHILD_SUBSIDY_PER_CHILD * eligibleChildren)
 }
 
-/** Level annuity payment that depletes principal over n years at rate r. */
+/** Level payment that depletes principal over n periods at per-period rate r (paid at period end). */
 export function annuityPayment(principal: number, rate: number, n: number): number {
   if (n <= 0 || principal <= 0) return 0
   if (Math.abs(rate) < 1e-8) return principal / n
@@ -65,19 +72,23 @@ export function annuityPayment(principal: number, rate: number, n: number): numb
 }
 
 /**
- * Project account balance from START_YEAR until age 85.
+ * Project the account from START_YEAR until age 85.
+ * Timing: own money is paid in monthly (≈ half a year of growth on average);
+ * the state subsidy is credited at year end. Withdrawals are paid monthly.
  * Age at start = START_YEAR − birthYear (calendar-year simplification).
- * Child eligibility: Kindergeld-style window ages 0–24 inclusive.
+ * Invalid inputs are sanitised; anyone already 67+ gets an empty result.
  */
 export function project(input: CalcInput): CalcResult {
-  const monthly = Math.max(0, input.monthly)
-  const children = Math.min(5, Math.max(0, Math.round(input.children)))
-  const birthYear = input.birthYear
-  const eff = input.returnPct / 100 - input.costPct / 100
+  const monthly = clamp(num(input.monthly), 0, MAX_MONTHLY_CONTRIBUTION)
+  const children = clamp(Math.round(num(input.children)), 0, 5)
+  const birthYear = clamp(Math.round(num(input.birthYear, 1973)), 1900, START_YEAR)
+  const effRaw = num(input.returnPct) / 100 - num(input.costPct) / 100
+  const eff = Math.max(effRaw, -0.99)
   const ageAtStart = START_YEAR - birthYear
-  const saveYears = Math.max(1, RETIRE_AGE - ageAtStart)
+  const saveYears = Math.max(0, RETIRE_AGE - ageAtStart)
   const annualOwn = monthly * 12
   const annualBasic = basicSubsidy(annualOwn)
+  const midYear = (1 + eff) ** 0.5
 
   const points: Point[] = [
     {
@@ -105,44 +116,51 @@ export function project(input: CalcInput): CalcResult {
   }
 
   for (let t = 0; t < saveYears; t++) {
-    const births = input.childBirths
+    const births = input.childBirths ?? []
     let eligible = 0
     for (let i = 0; i < children && i < births.length; i++) {
-      // Age of child during contribution year START_YEAR + t
-      const childAge = START_YEAR - births[i] + t
-      if (childAge >= 0 && childAge < 25) eligible += 1
+      const childAge = START_YEAR + t - births[i]
+      if (childAge >= 0 && childAge <= CHILD_MAX_AGE) eligible += 1
     }
     const annualSub = annualBasic + childSubsidy(annualOwn, eligible)
     own += annualOwn
     subsidyPaid += annualSub
-    value = (value + annualOwn + annualSub) * (1 + eff)
+    value = value * (1 + eff) + annualOwn * midYear + annualSub
     push(START_YEAR + t + 1, ageAtStart + t + 1, 'save', 0)
   }
 
   const brutto = value
-  const lumpSum = brutto * Math.min(1, Math.max(0, input.lumpSumRatio ?? 0))
+  const lumpSum = brutto * clamp(num(input.lumpSumRatio ?? 0), 0, 1)
   const remainRatio = brutto > 0 ? (brutto - lumpSum) / brutto : 0
   own *= remainRatio
   subsidyPaid *= remainRatio
   value = brutto - lumpSum
 
-  const annualWithdraw = annuityPayment(value, eff, DRAW_YEARS)
+  const monthlyRate = (1 + eff) ** (1 / 12) - 1
+  const monthlyPayment = annuityPayment(value, monthlyRate, DRAW_YEARS * 12)
 
-  for (let e = 1; e <= DRAW_YEARS; e++) {
-    const grown = value * (1 + eff)
-    const gainSlice = grown - own - subsidyPaid
-    const afterGrowth = Math.max(0, own + subsidyPaid + gainSlice)
-    const take = Math.min(annualWithdraw, afterGrowth)
-    const keepRatio = afterGrowth > 0 ? (afterGrowth - take) / afterGrowth : 0
-    own *= keepRatio
-    subsidyPaid *= keepRatio
-    value = afterGrowth - take
-    const withdrawn = take + (e === 1 ? lumpSum : 0)
-    push(START_YEAR + saveYears + e, ageAtStart + saveYears + e, 'draw', Math.round(withdrawn))
+  if (saveYears > 0) {
+    for (let e = 1; e <= DRAW_YEARS; e++) {
+      let withdrawnYear = 0
+      for (let m = 0; m < 12; m++) {
+        const grown = value * (1 + monthlyRate)
+        const take = Math.min(monthlyPayment, grown)
+        const keep = grown > 0 ? (grown - take) / grown : 0
+        own *= keep
+        subsidyPaid *= keep
+        value = grown - take
+        withdrawnYear += take
+      }
+      push(
+        START_YEAR + saveYears + e,
+        ageAtStart + saveYears + e,
+        'draw',
+        Math.round(withdrawnYear + (e === 1 ? lumpSum : 0)),
+      )
+    }
   }
 
   const atRetire = points[saveYears]
-  const monthlyWithdraw = annualWithdraw / 12
 
   return {
     age: ageAtStart,
@@ -150,10 +168,8 @@ export function project(input: CalcInput): CalcResult {
     eff,
     brutto: Math.round(brutto),
     foerderung: atRetire?.subsidy ?? 0,
-    annualWithdraw: Math.round(annualWithdraw),
+    annualWithdraw: Math.round(monthlyPayment * 12),
     lumpSum: Math.round(lumpSum),
-    monthlyNetLow: monthlyWithdraw * 0.7,
-    monthlyNetHigh: monthlyWithdraw * 0.8,
     points,
   }
 }
