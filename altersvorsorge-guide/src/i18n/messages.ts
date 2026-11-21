@@ -243,7 +243,7 @@ export const messages = {
       taxTitle: "受补贴 vs. 未受补贴资金的税务要点",
       taxItems: [
         "受补贴 / 税前扣除部分（常见口径：每年约不超过 1,800 欧元相关路径）：提领时适用后置征税（Nachgelagerte Besteuerung），发放额全额进入个税税基。",
-        "超额未受补贴部分（自付可至约 6,840 欧元 / 年上限内超出补贴口径的部分）：存入时已是税后资金；提领时本金不二次全额征税，收益部分适用于减半征规则，§ 20 Abs. 1 Nr. 6 EStG。",
+        "超额未受补贴部分（自付可至约 6,840 欧元 / 年上限内超出补贴口径的部分）：存入时已是税后资金；提领时本金不二次全额征税，收益部分在典型条件下（如持有约满 12 年且发放时年满 62 岁）可适用减半征规则，§ 20 Abs. 1 Nr. 6 EStG。此为简化说明，非正式税务建议，以当年税法为准。",
       ],
       twoLabel: "两个合规账户：",
       two:
@@ -530,7 +530,7 @@ export const messages = {
       taxTitle: "Subsidised vs unsubsidised capital — tax notes",
       taxItems: [
         "Subsidised / pre-tax deduction path (often up to about €1,800 / year): payouts are taxed later (Nachgelagerte Besteuerung); the full payment enters the income-tax base.",
-        "Excess unsubsidised part (own contributions up to about €6,840 / year beyond the subsidy path): contributions were after-tax; at payout the capital is not fully taxed again, and the gains portion is subject to the half-taxation rule, § 20 Abs. 1 Nr. 6 EStG.",
+        "Excess unsubsidised part (own contributions up to about €6,840 / year beyond the subsidy path): contributions were after-tax; at payout the capital is not fully taxed again, and the gains portion is typically eligible for the half-taxation rule under § 20 Abs. 1 Nr. 6 EStG when conditions such as roughly a 12-year holding period and age ≥62 at payout are met. Simplified overview only—not formal tax advice; current tax law prevails.",
       ],
       twoLabel: "Two compliant accounts: ",
       two:
