@@ -105,13 +105,6 @@ export default function Film() {
     else resume();
   }, [phase, playFromStart, pause, resume]);
 
-  const buttonLabel =
-    phase === "playing"
-      ? f.chartVideoPause
-      : phase === "paused"
-        ? f.chartVideoResume
-        : f.chartVideoPlay;
-
   return (
     <>
       <header className="page-head">
@@ -175,13 +168,6 @@ export default function Film() {
             {f.videoFallback}{" "}
             <a href={CHART_VIDEO_SRC}>{f.downloadVideo}</a>
           </video>
-          <button
-            type="button"
-            className={`video-play-btn${phase === "playing" ? " is-dim" : ""}`}
-            onClick={onActivate}
-          >
-            {buttonLabel}
-          </button>
         </div>
       </section>
     </>
