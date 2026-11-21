@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Minus, Plus, RotateCcw } from 'lucide-react'
+import { Minus, Plus } from 'lucide-react'
 import type { Point } from './calc'
 import { formatEuro } from './calc'
 import { chartLabels, type Lang } from './i18n'
@@ -86,6 +86,20 @@ function formatAxis(n: number, lang: Lang, step: number) {
 
 function clampZoom(z: number) {
   return Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z))
+}
+
+function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, r)
+    return
+  }
+  const rr = Math.min(r, w / 2, h / 2)
+  ctx.moveTo(x + rr, y)
+  ctx.arcTo(x + w, y, x + w, y + h, rr)
+  ctx.arcTo(x + w, y + h, x, y + h, rr)
+  ctx.arcTo(x, y + h, x, y, rr)
+  ctx.arcTo(x, y, x + w, y, rr)
+  ctx.closePath()
 }
 
 function touchDist(a: Touch, b: Touch) {
@@ -220,7 +234,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       ctx.fillStyle = 'rgba(232, 244, 240, 0.55)'
       ctx.fillRect(PLOT_LEFT, PLOT_TOP, plotW, PLOT_H)
 
-      ctx.font = `11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `12px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.textAlign = 'right'
       ctx.textBaseline = 'middle'
       for (let i = 0; i <= ticks; i++) {
@@ -328,7 +342,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         const left = x - tw / 2 - 6
         ctx.fillStyle = '#0b3d4a'
         ctx.beginPath()
-        ctx.roundRect(left, 6, tw + 12, 16, 8)
+        roundRectPath(ctx, left, 6, tw + 12, 16, 8)
         ctx.fill()
         ctx.fillStyle = '#f4faf8'
         ctx.textAlign = 'center'
@@ -341,7 +355,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           const w = ctx.measureText(text).width
           ctx.fillStyle = 'rgba(244, 250, 248, 0.92)'
           ctx.beginPath()
-          ctx.roundRect(mid - w / 2 - 10, PLOT_TOP + 2, w + 20, 22, 10)
+          roundRectPath(ctx, mid - w / 2 - 10, PLOT_TOP + 2, w + 20, 22, 10)
           ctx.fill()
           ctx.strokeStyle = 'rgba(11, 61, 74, 0.2)'
           ctx.lineWidth = 1
@@ -355,7 +369,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         phaseLabel(labels.draw, x, PLOT_LEFT + plotW)
       }
 
-      ctx.font = `10px 'Source Sans 3', 'Noto Sans SC', sans-serif`
+      ctx.font = `11px 'Source Sans 3', 'Noto Sans SC', sans-serif`
       ctx.fillStyle = '#5a6f74'
       // Avoid unreadable year-label pile-up when many points share one viewport width.
       const yearStep = Math.max(1, Math.ceil(last / Math.max(Math.floor(plotW / 26), 8)))
@@ -539,7 +553,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       <div
         className="chart-zoom-bar"
         role="toolbar"
-        aria-label={labels.zoomIn}
+        aria-label={`${labels.zoomOut} / ${labels.zoomIn}`}
         data-zoom={zoomPct}
       >
         <button
@@ -590,23 +604,6 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
         >
           <Plus className="size-4" aria-hidden="true" />
         </button>
-        {!atMinZoom && (
-          <button
-            type="button"
-            className="chart-zoom-btn"
-            aria-label={labels.zoomReset}
-            data-zoom-action="reset-icon"
-            onPointerUp={onZoomResetPointer}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                applyZoomRef.current(1)
-              }
-            }}
-          >
-            <RotateCcw className="size-4" aria-hidden="true" />
-          </button>
-        )}
       </div>
 
       <div
@@ -619,8 +616,23 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
           <canvas
             ref={canvasRef}
             className="block"
+            tabIndex={0}
             onPointerMove={onPointerMove}
             onPointerLeave={() => setHover(null)}
+            onBlur={() => setHover(null)}
+            onKeyDown={(e) => {
+              if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return
+              e.preventDefault()
+              const hits = hitsRef.current
+              if (hits.length === 0) return
+              const cur = hover ? hits.findIndex((h) => h.year === hover.year && h.age === hover.age) : activeIndex
+              let next = cur
+              if (e.key === 'ArrowLeft') next = cur - 1
+              else if (e.key === 'ArrowRight') next = cur + 1
+              else if (e.key === 'Home') next = 0
+              else next = hits.length - 1
+              setHover(hits[Math.min(hits.length - 1, Math.max(0, next))])
+            }}
             role="img"
             aria-label={labels.total}
           />
@@ -664,7 +676,7 @@ export function Chart({ points, lang = 'zh' }: { points: Point[]; lang?: Lang })
       )}
 
       {summary && (
-        <p className="mt-3 text-sm text-[color:var(--ink)]">
+        <p className="mt-3 text-sm text-[color:var(--ink)]" aria-live="polite">
           <span className="font-semibold">{labels.yearAgeParen(summary.year, summary.age)}</span>
           <span className="text-[color:var(--muted)]"> · {labels.totalShort} </span>
           <span className="font-semibold tabular-nums text-[color:var(--good)]">
