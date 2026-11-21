@@ -60,7 +60,7 @@ export const chartLabels = {
   zhHant: {
     unit: '萬',
     age67: '67歲',
-    save: '積累期',
+    save: '累積期',
     draw: '提領期',
     yearAge: (y: number, a: number) => `${y}年 · ${a}歲`,
     yearAgeParen: (y: number, a: number) => `${y}年（${a}歲）`,
@@ -124,7 +124,7 @@ export const copy: Record<Lang, Copy> = {
     title: '德国个人养老投资账户计算器',
     brand: 'Altersvorsorgedepot',
     subtitle:
-      '按照联邦议会 2026 年 3 月 27 日通过、联邦参议院 2026 年 4 月 24 日同意、2026 年 5 月 29 日公布的养老改革法案估算，2027 年 1 月 1 日起生效实施。',
+      '按照联邦议会 2026 年 3 月 27 日通过、联邦参议院 2026 年 5 月 8 日同意、2026 年 5 月 29 日公布的养老改革法案估算，2027 年 1 月 1 日起生效实施。',
     monthly: '每月投资额（自有资金）',
     monthlyTip:
       '每月存入 30 欧元的时候，国家补贴相对于你自己存入的金额比例最高。每月存入 150 欧元，可以拿到最高补贴。每月最多可以存入 570 欧元。',
@@ -132,27 +132,29 @@ export const copy: Record<Lang, Copy> = {
     birthTip: '用来计算到 67 岁还剩多少年。年龄只影响积累多久，不影响补贴比例。',
     expected: (e) => `预期年化收益率 ${e}%`,
     expectedTip:
-      '投资标的的预期长期年化回报。全球股票长期大约 6% 到 8%。这里默认 7%。',
+      '投资标的的预期长期年化回报，只是一个假设，不代表未来表现。历史上全球股票的长期名义回报大致在 6% 到 8% 之间。这里默认 7%。',
     cost: (e) => `有效成本（年化）${e}%`,
     costTip: '产品的总费用率。标准产品法律规定最高 1%。有效收益率 = 预期收益率 − 成本。',
     effective: (e) => `有效收益率 ${e}% 年化`,
     children: '有儿童津贴资格的子女数量',
-    childrenTip: '每个有 Kindergeld 资格的子女，每年最高 300 欧元子女补贴。',
+    childrenTip:
+      '每个有 Kindergeld 资格的子女，每年最高 300 欧元子女补贴。子女补贴合计不会超过你自己存入的金额。',
     childYears: '子女出生年份',
-    childYearsTip: '每个子女单独填出生年份。子女补贴通常持续到该子女约 25 岁。',
+    childYearsTip:
+      '每个子女单独填出生年份。按年计算：孩子在当年 24 岁及以下才有子女补贴。2003 年以前出生的孩子在 2027 年已超过这个年龄，不会有补贴。',
     childN: (e) => `第 ${e} 个`,
     notesTitle: '说明',
     notes: [
-      '积累期的税务优惠体现在：（1）每年的自缴金额（最高 1800 €）和国家补贴，都可以按特别支出减少应纳税收入；（2）该账户内股票基金和 ETF 的资本利得、基金分红，以及每年的基金预扣税，完全免税。',
+      '积累期的税务优惠体现在：（1）每年的自缴金额（最高 1800 €）和国家补贴，都可以按特别支出减少应纳税收入；（2）该账户内股票基金和 ETF 的资本利得、基金分红，以及每年的预缴定额税（Vorabpauschale），完全免税。',
       '个人的税前年收入，例如工作收入、资本收入或其他收入，不改变资产增值的趋势和总额。',
-      '提领期提取额按正常的个人收入申报，不区分自付、国家补贴或资产增值。未取出的余额继续增值。85岁以后全部余额可以一次性取出。',
-      '仅为简单估算，不构成投资建议。收益率和有效成本可以自行设定。估算未包含职场新人奖金、Frühstart-Rente 等情形以及未来可能的法规及税费调整。本计算器以 2027 年 1 月 1 日为第一笔缴费年度起点。',
+      '提领期提取额按正常的个人收入申报，不区分自付、国家补贴或资产增值。未取出的余额继续增值。本计算器假设 67 至 85 岁每月等额领取，到 85 岁正好领完，没有计入 85 岁之后的年金或剩余资金。',
+      '仅为简单估算，不构成投资建议。收益率和有效成本可以自行设定。估算未包含职场新人奖金、Frühstart-Rente 等情形以及未来可能的法规及税费调整。本计算器以 2027 年 1 月 1 日为第一笔缴费年度起点；自缴按每月投入、补贴按年末到账计算。',
     ],
     withdrawTitle: '提取额 67–85 岁（不一次性提取）',
     monthlyPreTax: '月度，税前',
     purchasing: (e) => `按现在的购买力约 ${e} €`,
     purchasingTip:
-      '把 67 岁开始领取的这笔税前月提取额，按每年 2% 的通胀折回今天，看它大概相当于现在的多少钱。实际物价涨幅可能远高于 2%，所以到时候的实际购买力可能会更少。',
+      '把 67 岁开始领取的这笔税前月提取额，按每年 2% 的通胀折回今天，看它大概相当于现在的多少钱。之后每年的提取额不随通胀调整，实际购买力会逐年下降。实际物价涨幅可能远高于 2%，所以到时候的实际购买力可能会更少。',
     assetsTitle: '67 岁时总资产（税前）',
     assetsSplit: (e, t, n) => `自付 ${e} · 补贴 ${t} · 增值 ${n}`,
     chartFull: '资产增长（退休时不一次性提取）',
@@ -168,35 +170,37 @@ export const copy: Record<Lang, Copy> = {
     title: '德國個人養老投資帳戶計算器',
     brand: 'Altersvorsorgedepot',
     subtitle:
-      '按照聯邦議會 2026 年 3 月 27 日通過、聯邦參議院 2026 年 4 月 24 日同意、2026 年 5 月 29 日公布的養老改革法案估算，2027 年 1 月 1 日起生效實施。',
+      '按照聯邦議會 2026 年 3 月 27 日通過、聯邦參議院 2026 年 5 月 8 日同意、2026 年 5 月 29 日公布的養老改革法案估算，2027 年 1 月 1 日起生效實施。',
     monthly: '每月投資額（自有資金）',
     monthlyTip:
       '每月存入 30 歐元的時候，國家補貼相對於你自己存入的金額比例最高。每月存入 150 歐元，可以拿到最高補貼。每月最多可以存入 570 歐元。',
     birth: '出生年份',
-    birthTip: '用來計算到 67 歲還剩多少年。年齡只影響積累多久，不影響補貼比例。',
+    birthTip: '用來計算到 67 歲還剩多少年。年齡只影響累積多久，不影響補貼比例。',
     expected: (e) => `預期年化收益率 ${e}%`,
     expectedTip:
-      '投資標的的預期長期年化回報。全球股票長期大約 6% 到 8%。這裡預設 7%。',
+      '投資標的的預期長期年化回報，只是一個假設，不代表未來表現。歷史上全球股票的長期名義回報大致在 6% 到 8% 之間。這裡預設 7%。',
     cost: (e) => `有效成本（年化）${e}%`,
     costTip: '產品的總費用率。標準產品法律規定最高 1%。有效收益率 = 預期收益率 − 成本。',
     effective: (e) => `有效收益率 ${e}% 年化`,
     children: '有兒童津貼資格的子女數量',
-    childrenTip: '每個有 Kindergeld 資格的子女，每年最高 300 歐元子女補貼。',
+    childrenTip:
+      '每個有 Kindergeld 資格的子女，每年最高 300 歐元子女補貼。子女補貼合計不會超過你自己存入的金額。',
     childYears: '子女出生年份',
-    childYearsTip: '每個子女單獨填出生年份。子女補貼通常持續到該子女約 25 歲。',
+    childYearsTip:
+      '每個子女單獨填出生年份。按年計算：孩子在當年 24 歲及以下才有子女補貼。2003 年以前出生的孩子在 2027 年已超過這個年齡，不會有補貼。',
     childN: (e) => `第 ${e} 個`,
     notesTitle: '說明',
     notes: [
-      '積累期的稅務優惠體現在：（1）每年的自繳金額（最高 1800 €）和國家補貼，都可以按特別支出減少應納稅收入；（2）該帳戶內股票基金和 ETF 的資本利得、基金分紅，以及每年的基金預扣稅，完全免稅。',
+      '累積期的稅務優惠體現在：（1）每年的自繳金額（最高 1800 €）和國家補貼，都可以按特別支出減少應納稅收入；（2）該帳戶內股票基金和 ETF 的資本利得、基金分紅，以及每年的預繳定額稅（Vorabpauschale），完全免稅。',
       '個人的稅前年收入，例如工作收入、資本收入或其他收入，不改變資產增值的趨勢和總額。',
-      '提領期提取額按正常的個人收入申報，不區分自付、國家補貼或資產增值。未取出的餘額繼續增值。85歲以後全部餘額可以一次性取出。',
-      '僅為簡單估算，不構成投資建議。收益率和有效成本可以自行設定。估算未包含職場新人獎金、Frühstart-Rente 等情形以及未來可能的法規及稅費調整。本計算器以 2027 年 1 月 1 日為第一筆繳費年度起點。',
+      '提領期提取額按正常的個人收入申報，不區分自付、國家補貼或資產增值。未取出的餘額繼續增值。本計算器假設 67 至 85 歲每月等額領取，到 85 歲正好領完，沒有計入 85 歲之後的年金或剩餘資金。',
+      '僅為簡單估算，不構成投資建議。收益率和有效成本可以自行設定。估算未包含職場新人獎金、Frühstart-Rente 等情形以及未來可能的法規及稅費調整。本計算器以 2027 年 1 月 1 日為第一筆繳費年度起點；自繳按每月投入、補貼按年末到帳計算。',
     ],
     withdrawTitle: '提取額 67–85 歲（不一次性提取）',
     monthlyPreTax: '月度，稅前',
     purchasing: (e) => `按現在的購買力約 ${e} €`,
     purchasingTip:
-      '把 67 歲開始領取的這筆稅前月提取額，按每年 2% 的通脹折回今天，看它大概相當於現在的多少錢。實際物價漲幅可能遠高於 2%，所以到時候的實際購買力可能會更少。',
+      '把 67 歲開始領取的這筆稅前月提取額，按每年 2% 的通脹折回今天，看它大概相當於現在的多少錢。之後每年的提取額不隨通脹調整，實際購買力會逐年下降。實際物價漲幅可能遠高於 2%，所以到時候的實際購買力可能會更少。',
     assetsTitle: '67 歲時總資產（稅前）',
     assetsSplit: (e, t, n) => `自付 ${e} · 補貼 ${t} · 增值 ${n}`,
     chartFull: '資產增長（退休時不一次性提取）',
@@ -212,7 +216,7 @@ export const copy: Record<Lang, Copy> = {
     title: 'German Personal Pension Investment Calculator',
     brand: 'Altersvorsorgedepot',
     subtitle:
-      'Estimate based on the pension reform act passed by the Bundestag on 27 March 2026, approved by the Bundesrat on 24 April 2026 and published on 29 May 2026. It takes effect on 1 January 2027.',
+      'Estimate based on the pension reform act passed by the Bundestag on 27 March 2026, approved by the Bundesrat on 8 May 2026 and published on 29 May 2026. It takes effect on 1 January 2027.',
     monthly: 'Monthly investment (your own money)',
     monthlyTip:
       'At €30 a month, the state subsidy is highest relative to what you pay in yourself. At €150 a month you receive the maximum basic subsidy. The most you can pay in is €570 a month.',
@@ -221,29 +225,30 @@ export const copy: Record<Lang, Copy> = {
       'Used to count the years left until age 67. Age only affects how long the money compounds, not the subsidy rate.',
     expected: (e) => `Expected annual return ${e}%`,
     expectedTip:
-      'The long-term annual return you expect from the investments. Global equities have historically returned about 6% to 8%. The default here is 7%.',
+      'The long-term annual return you expect from the investments. It is only an assumption and not a forecast. Global equities have historically returned roughly 6% to 8% a year in nominal terms. The default here is 7%.',
     cost: (e) => `Effective annual cost ${e}%`,
     costTip:
       'The product’s total expense ratio. The law caps the standard product at 1%. Effective return = expected return − costs.',
     effective: (e) => `Effective return ${e}% a year`,
     children: 'Children eligible for child benefit',
-    childrenTip: 'Up to €300 a year in child subsidy for each child who qualifies for Kindergeld.',
+    childrenTip:
+      'Up to €300 a year in child subsidy for each child who qualifies for Kindergeld. The total child subsidy never exceeds what you pay in yourself.',
     childYears: 'Children’s years of birth',
     childYearsTip:
-      'Enter a birth year for each child. The child subsidy usually continues until that child is about 25.',
+      'Enter a birth year for each child. It is counted year by year: a child only earns subsidy in years when they are 24 or younger. A child born before 2003 is already too old in 2027 and earns none.',
     childN: (e) => `Child ${e}`,
     notesTitle: 'Notes',
     notes: [
-      'The tax advantage during accumulation is: (1) your own contributions (up to €1,800 a year) and the state subsidy can both be deducted as special expenses, reducing taxable income; (2) capital gains and fund distributions from equity funds and ETFs in the account, and the annual fund advance lump-sum tax, are fully tax-free.',
+      'The tax advantage during accumulation is: (1) your own contributions (up to €1,800 a year) and the state subsidy can both be deducted as special expenses, reducing taxable income; (2) capital gains and fund distributions from equity funds and ETFs in the account, and the annual advance lump-sum tax (Vorabpauschale), are fully tax-free.',
       'Your pre-tax annual income — wages, capital income or other income — does not change the path or the total of the investment growth.',
-      'Withdrawals in the payout phase are declared as ordinary personal income. Own contributions, the state subsidy and investment growth are not distinguished. The balance that has not been withdrawn continues to grow. From age 85 the entire remaining balance can be withdrawn at once.',
-      'This is a simple estimate only and not investment advice. You can set the return and the effective cost yourself. The estimate does not include the career-starter bonus, Frühstart-Rente, or possible future changes to the law and to taxes. Contributions are modelled from 1 January 2027.',
+      'Withdrawals in the payout phase are declared as ordinary personal income. Own contributions, the state subsidy and investment growth are not distinguished. The balance that has not been withdrawn continues to grow. This calculator assumes equal monthly withdrawals from 67 to 85 that use up the balance exactly at 85; any annuity or remaining funds after 85 are not included.',
+      'This is a simple estimate only and not investment advice. You can set the return and the effective cost yourself. The estimate does not include the career-starter bonus, Frühstart-Rente, or possible future changes to the law and to taxes. Contributions are modelled from 1 January 2027: own money is paid in monthly and the subsidy is credited at year end.',
     ],
     withdrawTitle: 'Withdrawal, ages 67–85 (no lump sum)',
     monthlyPreTax: 'Monthly, before tax',
     purchasing: (e) => `About ${e} € in today’s purchasing power`,
     purchasingTip:
-      'The pre-tax monthly withdrawal starting at 67 is discounted back to today at 2% inflation a year, to show roughly what it would buy now. Actual inflation may be well above 2%, so real purchasing power could be lower.',
+      'The pre-tax monthly withdrawal starting at 67 is discounted back to today at 2% inflation a year, to show roughly what it would buy now. The amount is not adjusted for inflation afterwards, so its real value keeps falling. Actual inflation may be well above 2%, so real purchasing power could be lower.',
     assetsTitle: 'Total assets at age 67 (before tax)',
     assetsSplit: (e, t, n) => `Own ${e} · subsidy ${t} · growth ${n}`,
     chartFull: 'Asset growth (no lump sum at retirement)',
@@ -260,7 +265,7 @@ export const copy: Record<Lang, Copy> = {
     title: 'Rechner für das Altersvorsorgedepot',
     brand: 'Altersvorsorgedepot',
     subtitle:
-      'Schätzung nach dem Altersvorsorgereformgesetz. Der Bundestag hat es am 27. März 2026 beschlossen, der Bundesrat am 24. April 2026 zugestimmt. Verkündet am 29. Mai 2026, in Kraft ab dem 1. Januar 2027.',
+      'Schätzung nach dem Altersvorsorgereformgesetz. Der Bundestag hat es am 27. März 2026 beschlossen, der Bundesrat hat am 8. Mai 2026 zugestimmt. Verkündet am 29. Mai 2026, in Kraft ab dem 1. Januar 2027.',
     monthly: 'Monatliche Einzahlung (eigenes Geld)',
     monthlyTip:
       'Bis zu einer Einzahlung von 30 € im Monat ist die staatliche Förderung im Verhältnis zum eigenen Beitrag am höchsten. Bei 150 € im Monat erhältst Du die maximale Grundzulage. Höchstens 570 € im Monat sind möglich.',
@@ -269,29 +274,30 @@ export const copy: Record<Lang, Copy> = {
       'Damit wird berechnet, wie viele Jahre bis 67 bleiben. Das Alter beeinflusst nur die Ansparzeit, nicht den Fördersatz.',
     expected: (e) => `Erwartete Rendite pro Jahr ${e} %`,
     expectedTip:
-      'Die langfristig erwartete Jahresrendite der Anlage. Globale Aktien lagen langfristig etwa bei 6 % bis 8 %. Voreinstellung: 7 %.',
+      'Die langfristig erwartete Jahresrendite der Anlage. Sie ist nur eine Annahme und keine Prognose. Globale Aktien lagen historisch nominal etwa bei 6 % bis 8 % pro Jahr. Voreinstellung: 7 %.',
     cost: (e) => `Effektive Kosten pro Jahr ${e} %`,
     costTip:
       'Die Gesamtkostenquote des Produkts. Für das Standarddepot gilt gesetzlich höchstens 1 %. Effektive Rendite = erwartete Rendite − Kosten.',
     effective: (e) => `Effektive Rendite ${e} % pro Jahr`,
     children: 'Anzahl der kindergeldberechtigten Kinder',
-    childrenTip: 'Für jedes Kind mit Kindergeld gibt es bis zu 300 € Kinderzulage im Jahr.',
+    childrenTip:
+      'Für jedes Kind mit Kindergeld gibt es bis zu 300 € Kinderzulage im Jahr. Die Kinderzulage ist insgesamt nie höher als Dein eigener Beitrag.',
     childYears: 'Geburtsjahre der Kinder',
     childYearsTip:
-      'Für jedes Kind ein Geburtsjahr eintragen. Die Kinderzulage läuft in der Regel bis etwa zum 25. Lebensjahr.',
+      'Für jedes Kind ein Geburtsjahr eintragen. Gezählt wird Jahr für Jahr: Eine Kinderzulage gibt es nur in Jahren, in denen das Kind höchstens 24 ist. Ein Kind, das vor 2003 geboren wurde, ist 2027 schon zu alt und bringt keine Zulage.',
     childN: (e) => `Kind ${e}`,
     notesTitle: 'Hinweise',
     notes: [
       'Der Steuervorteil in der Ansparphase: (1) Eigene Beiträge (höchstens 1.800 € im Jahr) und die staatliche Zulage können als Sonderausgaben das zu versteuernde Einkommen mindern. (2) Kursgewinne und Fondsausschüttungen von Aktienfonds und ETFs im Konto sowie die jährliche Vorabpauschale sind vollständig steuerfrei.',
       'Das jährliche Einkommen vor Steuern, etwa aus Arbeit, Kapital oder anderen Quellen, ändert weder den Verlauf noch die Summe der Wertsteigerung.',
-      'Entnahmen in der Auszahlungsphase werden als normales persönliches Einkommen erklärt. Eigenbeitrag, staatliche Zulage und Wertzuwachs werden nicht unterschieden. Das noch nicht entnommene Guthaben wächst weiter. Ab 85 Jahren kann das gesamte Restguthaben auf einmal entnommen werden.',
-      'Dies ist nur eine einfache Schätzung und keine Anlageberatung. Rendite und effektive Kosten können Sie selbst festlegen. Die Schätzung enthält nicht den Berufseinsteigerbonus, die Frühstart-Rente und ähnliche Fälle sowie mögliche künftige Änderungen von Gesetz und Steuern. Einzahlungen werden ab dem 1. Januar 2027 modelliert.',
+      'Entnahmen in der Auszahlungsphase werden als normales persönliches Einkommen erklärt. Eigenbeitrag, staatliche Zulage und Wertzuwachs werden nicht unterschieden. Das noch nicht entnommene Guthaben wächst weiter. Der Rechner nimmt gleich hohe Monatsraten von 67 bis 85 an, die das Guthaben mit 85 genau aufbrauchen; eine Rente oder Restmittel nach 85 sind nicht enthalten.',
+      'Dies ist nur eine einfache Schätzung und keine Anlageberatung. Rendite und effektive Kosten kannst Du selbst festlegen. Die Schätzung enthält nicht den Berufseinsteigerbonus, die Frühstart-Rente und ähnliche Fälle sowie mögliche künftige Änderungen von Gesetz und Steuern. Einzahlungen werden ab dem 1. Januar 2027 modelliert: Der Eigenbeitrag fließt monatlich ein, die Zulage wird zum Jahresende gutgeschrieben.',
     ],
     withdrawTitle: 'Entnahme mit 67–85 Jahren (ohne Einmalauszahlung)',
     monthlyPreTax: 'Monatlich, vor Steuern',
     purchasing: (e) => `Etwa ${e} € in heutiger Kaufkraft`,
     purchasingTip:
-      'Die monatliche Entnahme vor Steuern ab 67 wird mit 2 % Inflation pro Jahr auf heute zurückgerechnet. Die tatsächliche Teuerung kann deutlich über 2 % liegen, die reale Kaufkraft also geringer sein.',
+      'Die monatliche Entnahme vor Steuern ab 67 wird mit 2 % Inflation pro Jahr auf heute zurückgerechnet. Der Betrag wird danach nicht an die Inflation angepasst, sein realer Wert sinkt also weiter. Die tatsächliche Teuerung kann deutlich über 2 % liegen, die reale Kaufkraft also geringer sein.',
     assetsTitle: 'Gesamtvermögen mit 67 (vor Steuern)',
     assetsSplit: (e, t, n) => `Eigenbeitrag ${e} · Zulage ${t} · Wertzuwachs ${n}`,
     chartFull: 'Vermögensaufbau (ohne Einmalauszahlung zum Rentenbeginn)',

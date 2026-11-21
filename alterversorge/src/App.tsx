@@ -2,20 +2,55 @@ import { useEffect, useId, useMemo, useState } from 'react'
 import { ChevronDown, ChevronUp, Info } from 'lucide-react'
 import { Chart } from './Chart'
 import {
+  CHILD_MAX_AGE,
   MAX_MONTHLY_CONTRIBUTION,
+  START_YEAR,
   formatEuro,
   formatMoney,
   project,
 } from './calc'
 import { copy, type Lang } from './i18n'
 
+/** Earliest birth year that is still eligible for at least one subsidy year. */
+const CHILD_MIN_BIRTH = START_YEAR - CHILD_MAX_AGE
+const CHILD_MAX_BIRTH = 2026
+const INFLATION = 0.02
+
 function digitsOnly(raw: string) {
   return raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '')
+}
+
+function readLang(): Lang {
+  try {
+    const saved = window.localStorage.getItem('av-lang')
+    if (saved === 'en' || saved === 'zh' || saved === 'zhHant' || saved === 'de') return saved
+  } catch {
+    // Storage can be blocked (private mode, strict settings); fall back to the default.
+  }
+  return 'zh'
+}
+
+function saveLang(lang: Lang) {
+  try {
+    window.localStorage.setItem('av-lang', lang)
+  } catch {
+    // ignore
+  }
 }
 
 function Tip({ text, label }: { text: string; label: string }) {
   const [open, setOpen] = useState(false)
   const tipId = useId()
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
   return (
     <>
       <button
@@ -45,6 +80,7 @@ function StepperField({
   id,
   value,
   onValue,
+  onBlur,
   min,
   max,
   fallback,
@@ -55,6 +91,8 @@ function StepperField({
   id: string
   value: string
   onValue: (v: string) => void
+  /** Called when focus leaves the field; use it to restore the last valid value. */
+  onBlur?: () => void
   min?: number
   max?: number
   fallback: number
@@ -79,7 +117,7 @@ function StepperField({
         value={value}
         onFocus={(e) => e.currentTarget.select()}
         onChange={(e) => onValue(digitsOnly(e.target.value))}
-        aria-describedby={undefined}
+        onBlur={onBlur}
       />
       <div className="stepper">
         <button type="button" aria-label={increaseLabel} onClick={() => nudge(1)}>
@@ -101,7 +139,7 @@ const LANGS: [Lang, string][] = [
 ]
 
 export default function App() {
-  const [lang, setLang] = useState<Lang>('zh')
+  const [lang, setLang] = useState<Lang>(readLang)
   const t = copy[lang]
 
   const [monthly, setMonthly] = useState(150)
@@ -120,24 +158,14 @@ export default function App() {
   const childrenId = useId()
   const returnId = useId()
   const costId = useId()
+  const childYearsId = useId()
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('av-lang')
-    if (saved === 'en' || saved === 'zh' || saved === 'zhHant' || saved === 'de') {
-      setLang(saved)
-    }
-  }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem('av-lang', lang)
+    saveLang(lang)
     document.title = t.title
     document.documentElement.lang =
       lang === 'zh' ? 'zh-CN' : lang === 'zhHant' ? 'zh-Hant' : lang === 'de' ? 'de' : 'en'
   }, [lang, t.title])
-
-  useEffect(() => {
-    if (monthly > MAX_MONTHLY_CONTRIBUTION) setMonthly(MAX_MONTHLY_CONTRIBUTION)
-  }, [monthly])
 
   const full = useMemo(
     () =>
@@ -168,7 +196,7 @@ export default function App() {
 
   const monthlyWithdraw = Math.round(full.annualWithdraw / 12)
   const lumpMonthly = Math.round(lump.annualWithdraw / 12)
-  const purchasingPower = Math.round(monthlyWithdraw / 1.02 ** full.saveYears)
+  const purchasingPower = Math.round(monthlyWithdraw / (1 + INFLATION) ** full.saveYears)
   const wide = lang === 'en' || lang === 'de'
 
   return (
@@ -201,11 +229,7 @@ export default function App() {
         className={`mx-auto grid w-full min-w-0 max-w-6xl gap-5 lg:gap-6 ${wide ? 'lg:grid-cols-[minmax(240px,0.36fr)_minmax(0,1fr)]' : 'lg:grid-cols-[minmax(220px,0.34fr)_minmax(0,1fr)]'}`}
       >
         <section className="panel relative min-w-0 rounded-[1.4rem] p-5 sm:p-6">
-          <div
-            className="lang-switch mb-5"
-            role="group"
-            aria-label={t.langLabel}
-          >
+          <div className="lang-switch mb-5" role="group" aria-label={t.langLabel}>
             {LANGS.map(([code, label]) => (
               <button
                 key={code}
@@ -246,6 +270,7 @@ export default function App() {
                 stepBy={10}
                 increaseLabel={t.increase}
                 decreaseLabel={t.decrease}
+                onBlur={() => setMonthlyText(String(monthly))}
                 onValue={(v) => {
                   setMonthlyText(v)
                   if (v === '') return
@@ -272,6 +297,7 @@ export default function App() {
                 fallback={Math.min(2026, Math.max(1961, birthYear || 1973))}
                 increaseLabel={t.increase}
                 decreaseLabel={t.decrease}
+                onBlur={() => setBirthText(String(birthYear))}
                 onValue={(v) => {
                   if (v === '') {
                     setBirthText('')
@@ -350,6 +376,7 @@ export default function App() {
                 fallback={children}
                 increaseLabel={t.increase}
                 decreaseLabel={t.decrease}
+                onBlur={() => setChildrenText(String(children))}
                 onValue={(v) => {
                   setChildrenText(v)
                   if (v === '') return
@@ -361,8 +388,11 @@ export default function App() {
             </div>
 
             {children > 0 && (
-              <div>
-                <div className="mb-1.5 flex flex-wrap items-center gap-1 text-sm font-semibold">
+              <div role="group" aria-labelledby={childYearsId}>
+                <div
+                  id={childYearsId}
+                  className="mb-1.5 flex flex-wrap items-center gap-1 text-sm font-semibold"
+                >
                   {t.childYears}
                   <Tip text={t.childYearsTip} label={t.moreInfo} />
                 </div>
@@ -380,6 +410,11 @@ export default function App() {
                           inputMode="numeric"
                           value={text}
                           onFocus={(e) => e.currentTarget.select()}
+                          onBlur={() =>
+                            setChildTexts((rows) =>
+                              rows.map((row, j) => (j === i ? String(childBirths[i]) : row)),
+                            )
+                          }
                           onChange={(e) => {
                             const raw = digitsOnly(e.target.value)
                             if (raw === '') {
@@ -389,7 +424,7 @@ export default function App() {
                             const n = Number(raw)
                             if (!Number.isFinite(n)) return
                             if (raw.length >= 4) {
-                              const clamped = Math.min(2026, Math.max(1986, n))
+                              const clamped = Math.min(CHILD_MAX_BIRTH, Math.max(CHILD_MIN_BIRTH, n))
                               setChildTexts((rows) =>
                                 rows.map((row, j) => (j === i ? String(clamped) : row)),
                               )
@@ -400,7 +435,7 @@ export default function App() {
                               setChildTexts((rows) =>
                                 rows.map((row, j) => (j === i ? raw : row)),
                               )
-                              if (n >= 1986 && n <= 2026) {
+                              if (n >= CHILD_MIN_BIRTH && n <= CHILD_MAX_BIRTH) {
                                 setChildBirths((rows) =>
                                   rows.map((row, j) => (j === i ? n : row)),
                                 )
@@ -431,9 +466,7 @@ export default function App() {
           <div className="grid min-w-0 gap-3 sm:grid-cols-2">
             <article className="panel rounded-[1.25rem] p-4 sm:p-5">
               <h2 className="text-sm font-medium text-[color:var(--muted)]">{t.withdrawTitle}</h2>
-              <p className="result-value mt-1">
-                {formatMoney(monthlyWithdraw, lang)} €
-              </p>
+              <p className="result-value mt-1">{formatMoney(monthlyWithdraw, lang)} €</p>
               <p className="mt-1 text-sm text-[color:var(--muted)]">{t.monthlyPreTax}</p>
               <div className="mt-2 flex flex-wrap items-center gap-1 text-sm">
                 {t.purchasing(formatMoney(purchasingPower, lang))}
