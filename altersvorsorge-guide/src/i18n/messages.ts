@@ -371,7 +371,7 @@ export const messages = {
         "Under the reformed Income Tax Act framework (EStG § 10a), people under 67 who meet the conditions typically include:",
       groups: [
         {
-          title: "Compulsory statutory pension insurees",
+          title: "Persons subject to compulsory statutory pension insurance",
           body: ": employees and others paying into Germany’s statutory pension scheme.",
         },
         {
@@ -391,7 +391,7 @@ export const messages = {
           body: ": including recognised Kindererziehungszeiten and similar cases.",
         },
         {
-          title: "Comparable foreign statutory pension insurees",
+          title: "Persons in a comparable foreign statutory pension scheme",
           body: ": in a system similar to Germany’s statutory pension, with unlimited German tax liability.",
         },
       ],
@@ -418,7 +418,7 @@ export const messages = {
       what2a: "It is ",
       what2Not: "not",
       what2b:
-        " an ordinary brokerage account. Buying ETFs monthly in a normal depot does not automatically create Zulage. The pension account must be certified; investing and withdrawals follow pension rules; early withdrawals outside the rules can trigger subsidy clawbacks and tax consequences.",
+        " an ordinary brokerage account. Buying ETFs monthly in a normal depot does not automatically entitle you to Zulage. The pension account must be certified; investing and withdrawals follow pension rules; early withdrawals outside the rules can trigger subsidy clawbacks and tax consequences.",
       openTitle: "Opening an account",
       open:
         "Eligible people can open a certified Altersvorsorgedepot with an authorised provider (or, where allowed, transfer an existing contract into the new subsidy system). After opening, pay yearly/monthly own contributions; subsidies are credited after verification in the following year.",
@@ -504,7 +504,7 @@ export const messages = {
       fees:
         "Effective costs (Effektivkosten) in the Standarddepot accumulation phase are commonly capped at 1.0% p.a. Sales/account fees must be amortised as required; transfer fees are capped; fees not listed on the product page need not be paid. You should receive a free annual fee and capital statement.",
       riskTolerance:
-        "With no mandatory capital guarantee, investors may raise equity-ETF weight within the rules — higher return potential and higher drawdown risk. Judge products by long-term net return and your ability to bear losses, not by subsidy alone. Investors who prefer not to take market risk can still put most or all of their money into traditional products that guarantee own capital and state subsidies.",
+        "With no mandatory capital guarantee, investors may raise equity-ETF weight within the rules — higher return potential and higher drawdown risk. Judge products by long-term net return and your ability to bear losses, not by subsidy alone. Investors who prefer not to take market risk can still put most or all of their money into traditional products that guarantee the invested capital (and credited state subsidies).",
       retireTitle: "Reaching retirement age",
       retireBefore: "For withdrawals, relocation and tax: ",
       retireLink: "Exit / Withdrawal / Inheritance →",
