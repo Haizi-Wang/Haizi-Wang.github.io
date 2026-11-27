@@ -71,6 +71,7 @@ export default function Layout() {
           </p>
           <div className="footer-meta">
             <span>{lang === "zh" ? t.lang.footerDefault : t.lang.footerEn}</span>
+            <span>{t.lang.deutschNote}</span>
             <NavLink to="/rechner">{t.footer.calc}</NavLink>
             <a
               href="https://github.com/Haizi-Wang/Haizi-Wang.github.io/tree/main/altersvorsorge-guide"
