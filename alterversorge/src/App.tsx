@@ -4,6 +4,7 @@ import { Chart } from './Chart'
 import {
   CHILD_MAX_AGE,
   MAX_MONTHLY_CONTRIBUTION,
+  MIN_ANNUAL_FOR_SUBSIDY,
   START_YEAR,
   formatEuro,
   formatMoney,
@@ -15,15 +16,26 @@ import { copy, type Lang } from './i18n'
 const CHILD_MIN_BIRTH = START_YEAR - CHILD_MAX_AGE
 const CHILD_MAX_BIRTH = 2026
 const INFLATION = 0.02
+const MIN_MONTHLY_FOR_SUBSIDY = Math.ceil(MIN_ANNUAL_FOR_SUBSIDY / 12)
+/** Guide site locale key — used only when the calculator has no saved language. */
+const GUIDE_LANG_STORAGE_KEY = 'av-guide-lang'
 
 function digitsOnly(raw: string) {
   return raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '')
+}
+
+function htmlLang(lang: Lang): string {
+  return lang === 'zh' ? 'zh-CN' : lang === 'zhHant' ? 'zh-Hant' : lang === 'de' ? 'de' : 'en'
 }
 
 function readLang(): Lang {
   try {
     const saved = window.localStorage.getItem('av-lang')
     if (saved === 'en' || saved === 'zh' || saved === 'zhHant' || saved === 'de') return saved
+    // No calculator choice yet: follow the guide site language when embedded.
+    const site = window.localStorage.getItem(GUIDE_LANG_STORAGE_KEY)
+    if (site === 'en') return 'en'
+    if (site === 'zh') return 'zh'
   } catch {
     // Storage can be blocked (private mode, strict settings); fall back to the default.
   }
@@ -138,7 +150,7 @@ const LANGS: [Lang, string][] = [
   ['de', 'Deutsch'],
 ]
 
-export default function App() {
+export default function App({ standalone = false }: { standalone?: boolean } = {}) {
   const [lang, setLang] = useState<Lang>(readLang)
   const t = copy[lang]
 
@@ -162,10 +174,10 @@ export default function App() {
 
   useEffect(() => {
     saveLang(lang)
+    if (!standalone) return
     document.title = t.title
-    document.documentElement.lang =
-      lang === 'zh' ? 'zh-CN' : lang === 'zhHant' ? 'zh-Hant' : lang === 'de' ? 'de' : 'en'
-  }, [lang, t.title])
+    document.documentElement.lang = htmlLang(lang)
+  }, [lang, t.title, standalone])
 
   const full = useMemo(
     () =>
@@ -200,7 +212,10 @@ export default function App() {
   const wide = lang === 'en' || lang === 'de'
 
   return (
-    <div className="shell relative min-h-0 min-w-0 overflow-visible px-4 py-5 text-[color:var(--ink)] sm:px-6 lg:py-6">
+    <div
+      className="shell relative min-h-0 min-w-0 overflow-visible px-4 py-5 text-[color:var(--ink)] sm:px-6 lg:py-6"
+      lang={htmlLang(lang)}
+    >
       <div
         className="orb hidden lg:block"
         style={{
@@ -279,6 +294,14 @@ export default function App() {
                   setMonthly(n)
                 }}
               />
+              {monthly > 0 && monthly < MIN_MONTHLY_FOR_SUBSIDY && (
+                <p
+                  role="note"
+                  className="mt-2 rounded-lg border border-[color:var(--accent)] bg-white/60 px-3 py-2 text-xs leading-relaxed text-[color:var(--ink)]"
+                >
+                  {t.minSubsidyNote}
+                </p>
+              )}
             </div>
 
             <div>

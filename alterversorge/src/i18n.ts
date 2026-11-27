@@ -34,6 +34,7 @@ export type Copy = {
   moreInfo: string
   increase: string
   decrease: string
+  minSubsidyNote: string
 }
 
 export const chartLabels = {
@@ -165,6 +166,8 @@ export const copy: Record<Lang, Copy> = {
     moreInfo: '更多说明',
     increase: '增加',
     decrease: '减少',
+    minSubsidyNote:
+      '每月至少存入 10 欧元（每年 120 欧元）才能获得国家补贴；低于这个金额没有补贴。',
   },
   zhHant: {
     title: '德國個人養老投資帳戶計算器',
@@ -211,6 +214,8 @@ export const copy: Record<Lang, Copy> = {
     moreInfo: '更多說明',
     increase: '增加',
     decrease: '減少',
+    minSubsidyNote:
+      '每月至少存入 10 歐元（每年 120 歐元）才能獲得國家補貼；低於這個金額沒有補貼。',
   },
   en: {
     title: 'German Personal Pension Investment Calculator',
@@ -260,6 +265,8 @@ export const copy: Record<Lang, Copy> = {
     moreInfo: 'More information',
     increase: 'Increase',
     decrease: 'Decrease',
+    minSubsidyNote:
+      'You need at least €10 a month (€120 a year) to receive any state subsidy. Below that there is none.',
   },
   de: {
     title: 'Rechner für das Altersvorsorgedepot',
@@ -309,5 +316,7 @@ export const copy: Record<Lang, Copy> = {
     moreInfo: 'Weitere Hinweise',
     increase: 'Erhöhen',
     decrease: 'Verringern',
+    minSubsidyNote:
+      'Für eine Zulage sind mindestens 10 € im Monat (120 € im Jahr) nötig. Darunter gibt es keine Zulage.',
   },
 }
