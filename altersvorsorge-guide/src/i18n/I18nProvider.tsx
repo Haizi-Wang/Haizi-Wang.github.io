@@ -73,7 +73,11 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   }, [lang, setLang]);
 
   useEffect(() => {
+    const t = messages[lang];
     document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    document.title = t.meta.title;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", t.meta.description);
   }, [lang]);
 
   const value = useMemo<I18nValue>(

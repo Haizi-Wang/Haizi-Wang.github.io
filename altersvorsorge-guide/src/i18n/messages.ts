@@ -19,6 +19,12 @@ export const messages = {
       aria: "语言",
       footerDefault: "语言：简体中文（zh-CN）",
       footerEn: "Language: English",
+      deutschNote: "德语界面见计算器（Rechner）。",
+    },
+    meta: {
+      title: "Altersvorsorgedepot · 德国养老投资账户",
+      description:
+        "Altersvorsorgedepot / 德国养老投资账户 — 正式教育指南：准入、过程、投资方向、提领与计算器。",
     },
     footer: {
       disclaimerLabel: "免责声明：",
@@ -122,7 +128,7 @@ export const messages = {
         "：自 2027 缴费年度起，通常每年至少存入 120 欧元（约合每月 10 欧元），才进入基本补贴资格门槛之一。实际补贴仍按缴费金额比例计算，并非存满 120 欧元即可拿到最高补贴。",
       ageLabel: "年龄",
       age: "：对自雇、自由职业者及部分扩展人群，申请补贴的年龄前提多为未满 67 岁。",
-      bonusLabel: "25 岁以下 Berufseinsteiger-Bonus：",
+      bonusLabel: "25 岁以下 Berufseinsteigerbonus：",
       bonus:
         "缴费年度开始时未满 25 岁且符合资格的投保人，基础补贴可一次性额外增加 200 欧元，注入认证养老账户（非现金打入私人银行卡）。全日制学生若未缴纳法定养老保险，通常暂不具备直接资格；通过有缴费义务的学生工等方式参保后可激活资格。",
       next: "下一步了解开户数量、缴费与补贴如何计算：",
@@ -214,7 +220,7 @@ export const messages = {
       standardItems: [
         "提供商须至少提供两类 OGAW：稳健（风险 1–2）与 增长（风险 3–5）。",
         "若稳健基金升至风险 4 及以上，或增长基金脱离 3–5 区间，提供商须强制替换调仓。",
-        "Glidepath / Derisking：退休前 5 年，高风险组件（3–5）占比通常不得超过总资产 50%；退休前 2 年及提领开始时，通常不得超过 30%。",
+        "Glidepath / De-risking：退休前 5 年，高风险组件（3–5）占比通常不得超过总资产 50%；退休前 2 年及提领开始时，通常不得超过 30%。",
       ],
       feesLabel: "费用：",
       fees:
@@ -301,6 +307,13 @@ export const messages = {
       aria: "Language",
       footerDefault: "语言：简体中文（zh-CN）",
       footerEn: "Language: English",
+      deutschNote:
+        "German (Deutsch) UI is available in the calculator (Rechner).",
+    },
+    meta: {
+      title: "Altersvorsorgedepot · German pension investment account",
+      description:
+        "Altersvorsorgedepot — formal educational guide: eligibility, process, investing, withdrawals, and calculator.",
     },
     footer: {
       disclaimerLabel: "Disclaimer: ",
@@ -404,7 +417,7 @@ export const messages = {
         ": from contribution year 2027, usually at least €120 per year (~€10/month) to meet one basic-subsidy threshold. The subsidy still scales with contributions — €120 alone does not unlock the maximum.",
       ageLabel: "Age",
       age: ": for the self-employed, freelancers and some extended groups, applicants are typically under 67.",
-      bonusLabel: "Under-25 Berufseinsteiger-Bonus: ",
+      bonusLabel: "Under-25 career-starter bonus (Berufseinsteigerbonus): ",
       bonus:
         "If you are under 25 at the start of the contribution year and eligible, the basic subsidy can rise by a one-off extra €200 into the certified account (not paid in cash to a private bank account). Full-time students without statutory pension contributions usually lack direct entitlement until they become insured (e.g. via student jobs with contribution duty).",
       next: "Next: how many accounts, contributions and subsidy maths: ",
@@ -424,7 +437,7 @@ export const messages = {
         "Eligible people can open a certified Altersvorsorgedepot with an authorised provider (or, where allowed, transfer an existing contract into the new subsidy system). After opening, pay yearly/monthly own contributions; subsidies are credited after verification in the following year.",
       typesTitle: "Two account types",
       types:
-        "The standard (basic) pension investment account (Standarddepot: fully automatic, default allocation, closed management) and the self-directed pension investment account (Individuelles Altersvorsorgedepot).",
+        "The standard (basic) pension investment account (Standarddepot: fully automatic, provider-managed with a locked default allocation) and the self-directed pension investment account (Individuelles Altersvorsorgedepot).",
       howManyTitle: "How many accounts can one person open?",
       howMany1a:
         "Existing Riester contracts do not count toward this limit; a taxpayer may have at most ",
@@ -498,7 +511,7 @@ export const messages = {
       standardItems: [
         "Providers must offer at least two OGAW sleeves: defensive (risk 1–2) and growth (risk 3–5).",
         "If a defensive fund rises to risk 4+ or a growth fund leaves the 3–5 band, the provider must force a switch.",
-        "Glidepath / derisking: in the 5 years before retirement, higher-risk sleeves (3–5) usually may not exceed 50% of assets; in the last 2 years and at payout start, usually not more than 30%.",
+        "Glidepath / de-risking: in the 5 years before retirement, higher-risk sleeves (3–5) usually may not exceed 50% of assets; in the last 2 years and at payout start, usually not more than 30%.",
       ],
       feesLabel: "Fees: ",
       fees:
@@ -543,7 +556,7 @@ export const messages = {
         "If the account holder dies, the spouse and children have a right to inherit. How the account balance is inherited mainly depends on whether the retirement payout phase has already begun, the heirs’ status, and the chosen form of withdrawal or transfer.",
       feeTitle: "Fees in the retirement payout phase",
       fee:
-        "There is no single fixed fee. Providers must disclose payout-phase fees in advance; if they are not stated, the fee is waived. Standard accounts are capped at 1.0% effective cost. One-off withdrawals (up to 30%, or a Kleinbetragsrente buyout) carry no surrender or cancellation penalty.",
+        "There is no single fixed fee. Providers must disclose payout-phase fees in advance; if they are not stated, the fee is waived. In the Standarddepot accumulation phase, effective costs are commonly capped at 1.0% p.a. One-off withdrawals (up to 30%, or a Kleinbetragsrente buyout) carry no surrender or cancellation penalty.",
       nextBefore: "Check your contribution and payout scenarios: ",
       nextLink: "Open calculator →",
     },

@@ -7,9 +7,42 @@
     <meta name="theme-color" content="#0b3d4a" />
     <meta
       name="description"
-      content="Altersvorsorgedepot / 德国养老投资账户 — 正式教育指南：准入、过程、投资方向、提领与计算器。"
+      content="Altersvorsorgedepot — formal educational guide / 正式教育指南：eligibility, process, investing, withdrawals, and calculator."
     />
-    <title>Altersvorsorgedepot · 德国养老投资账户</title>
+    <title>Altersvorsorgedepot · German pension investment account / 德国养老投资账户</title>
+    <script>
+      // Prefer stored/?lang= title before React hydrates (avoid Chinese-only flash for EN).
+      (function () {
+        try {
+          var q = new URLSearchParams(location.search).get("lang");
+          var saved = null;
+          try {
+            saved = localStorage.getItem("av-guide-lang");
+          } catch (e) {}
+          var lang = q === "en" || q === "zh" ? q : saved === "en" || saved === "zh" ? saved : "zh";
+          var meta = document.querySelector('meta[name="description"]');
+          if (lang === "en") {
+            document.documentElement.lang = "en";
+            document.title = "Altersvorsorgedepot · German pension investment account";
+            if (meta) {
+              meta.setAttribute(
+                "content",
+                "Altersvorsorgedepot — formal educational guide: eligibility, process, investing, withdrawals, and calculator.",
+              );
+            }
+          } else {
+            document.documentElement.lang = "zh-CN";
+            document.title = "Altersvorsorgedepot · 德国养老投资账户";
+            if (meta) {
+              meta.setAttribute(
+                "content",
+                "Altersvorsorgedepot / 德国养老投资账户 — 正式教育指南：准入、过程、投资方向、提领与计算器。",
+              );
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
